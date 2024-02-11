@@ -1,0 +1,13 @@
+package_rename_config:
+  android:
+    app_name: Skill Chain
+#    package_name: com.skill.chain
+#    override_old_package: com.example.skill_chain
+    lang: kotlin
+
+  ios:
+    app_name: Skill Chain
+#    bundle_name: skill_chain
+#    package_name: com.skill.chain
+
+#  dart run package_rename
