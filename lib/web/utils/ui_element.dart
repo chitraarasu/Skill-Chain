@@ -44,6 +44,11 @@ unFocus(PointerDownEvent event) {
   hideKeyboard();
 }
 
+abstract class Screens {
+  static const root = '/';
+  static const dashboard = '/dashboard';
+}
+
 const packageName = "com.skill.chain";
 
 final loadingManager = LoadingManager();

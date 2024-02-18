@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:skill_chain/web/utils/resizer/fetch_pixels.dart';
 import 'package:skill_chain/web/utils/ui_element.dart';
 import 'package:skill_chain/web/utils/widgets/custom_textfield.dart';
@@ -89,6 +90,9 @@ class WebAuthentication extends StatelessWidget {
                               "Login",
                               buttonColor: brown,
                               radius: 10,
+                              onTap: () {
+                                Get.toNamed(Screens.dashboard);
+                              },
                             ),
                           ),
                           vSpace(15),

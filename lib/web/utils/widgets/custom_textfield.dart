@@ -56,11 +56,14 @@ class CustomTextField extends StatelessWidget {
             onChange!(val);
           }
         },
+        cursorHeight: 15,
+        cursorColor: brown,
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: const TextStyle(
             color: colorGrey1,
           ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 10),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),

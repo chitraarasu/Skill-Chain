@@ -4,7 +4,7 @@ import 'package:skill_chain/web/utils/resizer/fetch_pixels.dart';
 
 Widget getCustomFont(String text, double fontSize,
     {Color? fontColor,
-    int maxLine = 1,
+    int? maxLine,
     String fontFamily = firstFont,
     TextOverflow overflow = TextOverflow.ellipsis,
     TextDecoration decoration = TextDecoration.none,

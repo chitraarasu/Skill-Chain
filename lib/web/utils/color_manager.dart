@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 const Color colorGrey1 = Color(0xFF565E67);
 const Color colorGrey2 = Color(0xFFEDEEF1);
+const Color colorGrey3 = Color(0xFFA8AAB0);
 const Color brown = Color(0xFFD1B8A4);
+const Color brown1 = Color(0xFFF2F0EF);
 
 const LinearGradient gradientColors = LinearGradient(
   begin: Alignment.centerLeft,
