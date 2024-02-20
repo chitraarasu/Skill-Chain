@@ -4,8 +4,9 @@ import 'package:skill_chain/web/utils/color_manager.dart';
 import 'package:skill_chain/web/utils/ui_element.dart';
 import 'package:skill_chain/web/utils/widgets/widgets.dart';
 
-import '../models/dashboard_model.dart';
-import '../utils/font_manager.dart';
+import '../../models/dashboard_model.dart';
+import '../../utils/font_manager.dart';
+import 'home.dart';
 
 class WebDashboard extends StatelessWidget {
   WebDashboard({super.key});
@@ -149,9 +150,7 @@ class WebDashboard extends StatelessWidget {
                   bottomLeft: Radius.circular(30),
                 ),
               ),
-              child: Column(
-                children: [],
-              ),
+              child: Home(),
             ),
           ),
         ],
