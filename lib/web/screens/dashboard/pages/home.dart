@@ -3,7 +3,7 @@ import 'package:skill_chain/web/utils/font_manager.dart';
 import 'package:skill_chain/web/utils/ui_element.dart';
 import 'package:skill_chain/web/utils/widgets/widgets.dart';
 
-import '../../utils/color_manager.dart';
+import '../../../utils/color_manager.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});

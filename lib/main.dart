@@ -33,7 +33,27 @@ class MyApp extends StatelessWidget {
         ),
         GetPage(
           name: Screens.dashboard,
-          page: () => WebDashboard(),
+          page: () => WebDashboard(0),
+        ),
+        GetPage(
+          name: Screens.verification,
+          page: () => WebDashboard(1),
+        ),
+        GetPage(
+          name: Screens.institute,
+          page: () => WebDashboard(2),
+        ),
+        GetPage(
+          name: Screens.skillApproval,
+          page: () => WebDashboard(3),
+        ),
+        GetPage(
+          name: Screens.users,
+          page: () => WebDashboard(4),
+        ),
+        GetPage(
+          name: Screens.settings,
+          page: () => WebDashboard(5),
         ),
       ],
     );

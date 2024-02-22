@@ -47,7 +47,6 @@ unFocus(PointerDownEvent event) {
 abstract class Screens {
   static const root = '/';
   static const dashboard = '/dashboard';
-  static const home = '/home';
   static const verification = '/verification';
   static const institute = '/institute';
   static const skillApproval = '/skillApproval';

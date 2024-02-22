@@ -1,20 +1,29 @@
+import 'dart:html' as html;
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:skill_chain/web/screens/dashboard/pages/institue.dart';
+import 'package:skill_chain/web/screens/dashboard/pages/settings.dart';
+import 'package:skill_chain/web/screens/dashboard/pages/skill_approval.dart';
+import 'package:skill_chain/web/screens/dashboard/pages/users.dart';
+import 'package:skill_chain/web/screens/dashboard/pages/verification.dart';
 import 'package:skill_chain/web/utils/color_manager.dart';
 import 'package:skill_chain/web/utils/ui_element.dart';
 import 'package:skill_chain/web/utils/widgets/widgets.dart';
 
 import '../../models/dashboard_model.dart';
 import '../../utils/font_manager.dart';
-import 'home.dart';
+import 'pages/home.dart';
 
 class WebDashboard extends StatelessWidget {
-  WebDashboard({super.key});
+  final int index;
 
-  Rx<DashboardModel> selectedItem = Rx<DashboardModel>(dashboardList.first);
+  WebDashboard(this.index);
 
   @override
   Widget build(BuildContext context) {
+    Rx<int> selectedItem = Rx<int>(index);
+
     return Scaffold(
       body: Row(
         children: [
@@ -85,11 +94,15 @@ class WebDashboard extends StatelessWidget {
                               (e) => Obx(
                                 () => GestureDetector(
                                   onTap: () {
-                                    selectedItem.value = e;
+                                    selectedItem.value =
+                                        dashboardList.indexOf(e);
+                                    html.window.history
+                                        .replaceState(null, e.text, e.route);
                                   },
                                   child: AnimatedContainer(
                                     decoration: BoxDecoration(
-                                      color: selectedItem.value == e
+                                      color: selectedItem.value ==
+                                              dashboardList.indexOf(e)
                                           ? brown1
                                           : null,
                                       borderRadius: BorderRadius.circular(12.5),
@@ -150,7 +163,22 @@ class WebDashboard extends StatelessWidget {
                   bottomLeft: Radius.circular(30),
                 ),
               ),
-              child: Home(),
+              child: Obx(
+                () => AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 500),
+                  child: selectedItem.value == 1
+                      ? Verification()
+                      : selectedItem.value == 2
+                          ? Institute()
+                          : selectedItem.value == 3
+                              ? SkillApproval()
+                              : selectedItem.value == 4
+                                  ? Users()
+                                  : selectedItem.value == 5
+                                      ? Settings()
+                                      : Home(),
+                ),
+              ),
             ),
           ),
         ],
