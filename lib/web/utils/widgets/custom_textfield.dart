@@ -18,6 +18,7 @@ class CustomTextField extends StatelessWidget {
   final bool isBorderBlue;
   final double height;
   final int? hintSize;
+  final double? borderRadius;
 
   CustomTextField({
     this.hint,
@@ -36,10 +37,15 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType,
     this.height = 40,
     this.hintSize,
+    this.borderRadius,
   });
 
   @override
   Widget build(BuildContext context) {
+    var border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(borderRadius ?? 10.0),
+    );
+
     return SizedBox(
       height: 35,
       child: TextFormField(
@@ -64,9 +70,12 @@ class CustomTextField extends StatelessWidget {
             color: colorGrey1,
           ),
           contentPadding: EdgeInsets.symmetric(horizontal: 10),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
+          enabledBorder: isNeedborder ? border : InputBorder.none,
+          disabledBorder: isNeedborder ? border : InputBorder.none,
+          focusedBorder: isNeedborder ? border : InputBorder.none,
+          border: isNeedborder ? border : InputBorder.none,
+          focusedErrorBorder: isNeedborder ? border : InputBorder.none,
+          errorBorder: isNeedborder ? border : InputBorder.none,
         ),
       ),
     );

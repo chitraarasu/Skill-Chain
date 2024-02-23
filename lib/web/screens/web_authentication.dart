@@ -1,3 +1,5 @@
+import 'dart:html' as html;
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skill_chain/web/utils/resizer/fetch_pixels.dart';
@@ -91,7 +93,9 @@ class WebAuthentication extends StatelessWidget {
                               buttonColor: brown,
                               radius: 10,
                               onTap: () {
-                                Get.toNamed(Screens.dashboard);
+                                Get.offAndToNamed(Screens.dashboard);
+                                html.window.history
+                                    .replaceState(null, "Login", "");
                               },
                             ),
                           ),

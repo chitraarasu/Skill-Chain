@@ -2,7 +2,7 @@ import 'dart:html' as html;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:skill_chain/web/screens/dashboard/pages/institue.dart';
+import 'package:skill_chain/web/screens/dashboard/pages/institute/institute.dart';
 import 'package:skill_chain/web/screens/dashboard/pages/settings.dart';
 import 'package:skill_chain/web/screens/dashboard/pages/skill_approval.dart';
 import 'package:skill_chain/web/screens/dashboard/pages/users.dart';
@@ -25,6 +25,7 @@ class WebDashboard extends StatelessWidget {
     Rx<int> selectedItem = Rx<int>(index);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Row(
         children: [
           SizedBox(
@@ -133,22 +134,27 @@ class WebDashboard extends StatelessWidget {
                     ),
                   ),
                   vSpace(20),
-                  Row(
-                    children: [
-                      hSpace(20),
-                      Icon(
-                        Icons.exit_to_app_rounded,
-                        size: 17.5,
-                        color: colorGrey3,
-                      ),
-                      hSpace(6),
-                      getCustomFont(
-                        "Logout",
-                        15,
-                        fontColor: colorGrey3,
-                        fontWeight: semiBold,
-                      ),
-                    ],
+                  GestureDetector(
+                    onTap: () {
+                      Get.offAndToNamed(Screens.root);
+                    },
+                    child: Row(
+                      children: [
+                        hSpace(20),
+                        Icon(
+                          Icons.exit_to_app_rounded,
+                          size: 17.5,
+                          color: colorGrey3,
+                        ),
+                        hSpace(6),
+                        getCustomFont(
+                          "Logout",
+                          15,
+                          fontColor: colorGrey3,
+                          fontWeight: semiBold,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
