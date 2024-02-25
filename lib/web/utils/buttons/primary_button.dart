@@ -10,16 +10,27 @@ class PrimaryButton extends StatelessWidget {
   final EdgeInsets? padding;
   final Color? buttonColor;
   final Function()? onTap;
+  final Color? textColor;
+  final bool isNeedBorder;
 
-  PrimaryButton(this.title,
-      {this.radius, this.padding, this.onTap, this.buttonColor});
+  PrimaryButton(
+    this.title, {
+    this.radius,
+    this.padding,
+    this.onTap,
+    this.buttonColor,
+    this.textColor = Colors.white,
+    this.isNeedBorder = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
         backgroundColor: buttonColor,
-        // side: const BorderSide(color: Colors.white, width: 2.0),
+        side: !isNeedBorder
+            ? BorderSide.none
+            : BorderSide(color: Colors.white, width: 2.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius ?? 30.0),
         ),
@@ -27,14 +38,15 @@ class PrimaryButton extends StatelessWidget {
       ),
       onPressed: onTap,
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: FetchPixels.getPixelHeight(12),
-          horizontal: FetchPixels.getPixelWidth(17),
-        ),
+        padding: padding ??
+            EdgeInsets.symmetric(
+              vertical: FetchPixels.getPixelHeight(12),
+              horizontal: FetchPixels.getPixelWidth(17),
+            ),
         child: getCustomFont(
           title,
           16,
-          fontColor: Colors.white,
+          fontColor: textColor,
           maxLine: 1,
           fontWeight: bold,
         ),

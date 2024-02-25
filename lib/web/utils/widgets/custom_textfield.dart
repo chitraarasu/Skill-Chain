@@ -16,7 +16,7 @@ class CustomTextField extends StatelessWidget {
   final keyboardType;
   String? Function(String?)? validate;
   final bool isBorderBlue;
-  final double height;
+  final double? height;
   final int? hintSize;
   final double? borderRadius;
 
@@ -35,7 +35,7 @@ class CustomTextField extends StatelessWidget {
     this.validate,
     this.isBorderBlue = true,
     this.keyboardType,
-    this.height = 40,
+    this.height = 35,
     this.hintSize,
     this.borderRadius,
   });
@@ -47,7 +47,7 @@ class CustomTextField extends StatelessWidget {
     );
 
     return SizedBox(
-      height: 35,
+      height: height,
       child: TextFormField(
         textAlign: textAlign,
         maxLines: maxLine ?? 1,

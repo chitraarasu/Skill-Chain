@@ -14,5 +14,5 @@ List<DashboardModel> dashboardList = [
   DashboardModel("institution", "Institute", Screens.institute),
   DashboardModel("skill_approve", "Skill Approval", Screens.skillApproval),
   DashboardModel("user_management", "Users", Screens.users),
-  DashboardModel("settings", "Settings", Screens.settings),
+  // DashboardModel("settings", "Settings", Screens.settings),
 ];

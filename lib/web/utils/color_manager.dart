@@ -9,6 +9,8 @@ const Color darkBlue = Color(0xFF101421);
 const Color lightBlue = Color(0xFFA0CED6);
 const Color orange = Color(0xFFEC5938);
 const Color colorWhite = Color(0xFFF9F5F1);
+const Color lightGreen = Color(0xFFF2FFF5);
+const Color darkGreen = Color(0xFFA3DFAE);
 
 const LinearGradient gradientColors = LinearGradient(
   begin: Alignment.centerLeft,
