@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../font_manager.dart';
+import '../widgets/widgets.dart';
+
 class SecondaryButton extends StatelessWidget {
   final bool isFromProfile;
   final String? title;
@@ -34,20 +37,13 @@ class SecondaryButton extends StatelessWidget {
       onPressed: onTap,
       child: Padding(
         padding: padding ?? EdgeInsets.all(8.0),
-        child: Text(
+        child: getCustomFont(
           title ?? "Logout",
-          style: TextStyle(
-            fontSize: isFromProfile ? 17 : 15,
-            color: color ?? Colors.white,
-          ),
-          maxLines: 1,
+          16,
+          fontColor: color ?? Colors.white,
+          maxLine: 1,
+          fontWeight: bold,
         ),
-        // child: getCustomFont(
-        //   title ?? "Logout",
-        //   isFromProfile ? 17 : 15,
-        //   color ?? Colors.white,
-        //   1,
-        // ),
       ),
     );
   }

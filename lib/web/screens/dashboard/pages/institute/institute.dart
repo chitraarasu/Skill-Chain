@@ -8,6 +8,8 @@ import 'package:skill_chain/web/utils/ui_element.dart';
 import 'package:skill_chain/web/utils/widgets/widgets.dart';
 
 import '../../../../utils/resizer/fetch_pixels.dart';
+import '../../../../utils/widgets/custom_icons.dart';
+import '../../../../utils/widgets/custom_profile.dart';
 import '../../../../utils/widgets/custom_textfield.dart';
 
 class Institute extends StatelessWidget {
@@ -134,18 +136,7 @@ class Institute extends StatelessWidget {
                           vertical: 15.0, horizontal: 25),
                       child: Row(
                         children: [
-                          SizedBox(
-                            width: 55,
-                            child: Row(
-                              children: [
-                                CircleAvatar(
-                                  radius: 27.5,
-                                  backgroundImage: NetworkImage(
-                                      "https://images.unsplash.com/photo-1593085512500-5d55148d6f0d"),
-                                ),
-                              ],
-                            ),
-                          ),
+                          CustomProfile(),
                           hSpace(25),
                           Expanded(
                             flex: 2,
@@ -210,16 +201,7 @@ class Institute extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                getIcon(Icons.remove_red_eye_rounded),
-                                getIcon(Icons.edit),
-                                getIcon(Icons.delete, color: orange),
-                              ],
-                            ),
-                          ),
+                          CustomIcons(),
                         ],
                       ),
                     ),
