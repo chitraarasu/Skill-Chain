@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:skill_chain/web/screens/dashboard/pages/verification.dart';
 import 'package:skill_chain/web/utils/font_manager.dart';
 import 'package:skill_chain/web/utils/ui_element.dart';
 import 'package:skill_chain/web/utils/widgets/widgets.dart';
@@ -153,11 +154,8 @@ class Home extends StatelessWidget {
                   flex: 2,
                   child: GestureDetector(
                     onTap: () {},
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: lightBlue,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
+                    child: Verification(
+                      isFromHome: true,
                     ),
                   ),
                 ),
