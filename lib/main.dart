@@ -21,9 +21,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Skill Chain',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+          scrollbarTheme: ScrollbarThemeData().copyWith(
+            thickness: MaterialStateProperty.all(0),
+          )),
       // home: const WebAuthentication(),
       initialRoute: Screens.root,
       getPages: [

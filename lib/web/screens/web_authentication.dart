@@ -1,9 +1,8 @@
-import 'dart:html' as html;
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skill_chain/web/utils/resizer/fetch_pixels.dart';
 import 'package:skill_chain/web/utils/ui_element.dart';
+import 'package:skill_chain/web/utils/web_support.dart';
 import 'package:skill_chain/web/utils/widgets/custom_textfield.dart';
 import 'package:skill_chain/web/utils/widgets/widgets.dart';
 
@@ -94,8 +93,7 @@ class WebAuthentication extends StatelessWidget {
                               radius: 10,
                               onTap: () {
                                 Get.offAndToNamed(Screens.dashboard);
-                                html.window.history
-                                    .replaceState(null, "Login", "");
+                                setWebTitleAndUrl("Login", "");
                               },
                             ),
                           ),

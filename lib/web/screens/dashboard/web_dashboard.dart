@@ -1,5 +1,3 @@
-import 'dart:html' as html;
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skill_chain/web/screens/dashboard/pages/institute/institute.dart';
@@ -13,6 +11,7 @@ import 'package:skill_chain/web/utils/widgets/widgets.dart';
 
 import '../../models/dashboard_model.dart';
 import '../../utils/font_manager.dart';
+import '../../utils/web_support.dart';
 import 'pages/home.dart';
 
 class WebDashboard extends StatelessWidget {
@@ -97,8 +96,7 @@ class WebDashboard extends StatelessWidget {
                                   onTap: () {
                                     selectedItem.value =
                                         dashboardList.indexOf(e);
-                                    html.window.history
-                                        .replaceState(null, e.text, e.route);
+                                    setWebTitleAndUrl(e.text, e.route);
                                   },
                                   child: AnimatedContainer(
                                     decoration: BoxDecoration(

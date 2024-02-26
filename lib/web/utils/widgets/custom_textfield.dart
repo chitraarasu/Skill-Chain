@@ -50,6 +50,7 @@ class CustomTextField extends StatelessWidget {
       height: height,
       child: TextFormField(
         textAlign: textAlign,
+        minLines: maxLine ?? 1,
         maxLines: maxLine ?? 1,
         controller: controller,
         enabled: enable && isNeedTick,
@@ -69,7 +70,7 @@ class CustomTextField extends StatelessWidget {
           hintStyle: const TextStyle(
             color: colorGrey1,
           ),
-          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           enabledBorder: isNeedborder ? border : InputBorder.none,
           disabledBorder: isNeedborder ? border : InputBorder.none,
           focusedBorder: isNeedborder ? border : InputBorder.none,
