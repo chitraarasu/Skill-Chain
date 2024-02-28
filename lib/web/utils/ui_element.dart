@@ -48,6 +48,7 @@ abstract class Screens {
   static const root = '/';
   static const dashboard = '/dashboard';
   static const verification = '/verification';
+  static const addSkill = '/addSkill';
   static const institute = '/institute';
   static const skillApproval = '/skillApproval';
   static const users = '/users';

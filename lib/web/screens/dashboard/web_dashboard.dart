@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:skill_chain/web/screens/dashboard/pages/institute/institute.dart';
-import 'package:skill_chain/web/screens/dashboard/pages/settings.dart';
-import 'package:skill_chain/web/screens/dashboard/pages/skill_approval.dart';
-import 'package:skill_chain/web/screens/dashboard/pages/users.dart';
-import 'package:skill_chain/web/screens/dashboard/pages/verification.dart';
 import 'package:skill_chain/web/utils/color_manager.dart';
 import 'package:skill_chain/web/utils/ui_element.dart';
 import 'package:skill_chain/web/utils/widgets/widgets.dart';
@@ -12,7 +7,6 @@ import 'package:skill_chain/web/utils/widgets/widgets.dart';
 import '../../models/dashboard_model.dart';
 import '../../utils/font_manager.dart';
 import '../../utils/web_support.dart';
-import 'pages/home.dart';
 
 class WebDashboard extends StatelessWidget {
   final int index;
@@ -170,17 +164,7 @@ class WebDashboard extends StatelessWidget {
               child: Obx(
                 () => AnimatedSwitcher(
                   duration: const Duration(milliseconds: 500),
-                  child: selectedItem.value == 1
-                      ? Verification()
-                      : selectedItem.value == 2
-                          ? Institute()
-                          : selectedItem.value == 3
-                              ? SkillApproval()
-                              : selectedItem.value == 4
-                                  ? Users()
-                                  : selectedItem.value == 5
-                                      ? Settings()
-                                      : Home(),
+                  child: dashboardList[selectedItem.value].screen,
                 ),
               ),
             ),

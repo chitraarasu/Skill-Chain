@@ -188,21 +188,20 @@ class Users extends StatelessWidget {
                           Expanded(
                             child: Center(
                               child: PopupMenuButton<String>(
-                                itemBuilder: (context) =>
-                                    ["Add Skill", "View", "Edit", "Delete"]
-                                        .map((e) => PopupMenuItem(
-                                              value: "",
-                                              child: getCustomFont(
-                                                e,
-                                                13,
-                                                fontColor: colorGrey1,
-                                                fontWeight: bold,
-                                                maxLine: 1,
-                                                textAlign: TextAlign.justify,
-                                                txtHeight: 0,
-                                              ),
-                                            ))
-                                        .toList(),
+                                itemBuilder: (context) => ["Block", "Delete"]
+                                    .map((e) => PopupMenuItem(
+                                          value: "",
+                                          child: getCustomFont(
+                                            e,
+                                            13,
+                                            fontColor: colorGrey1,
+                                            fontWeight: bold,
+                                            maxLine: 1,
+                                            textAlign: TextAlign.justify,
+                                            txtHeight: 0,
+                                          ),
+                                        ))
+                                    .toList(),
                                 onSelected: (value) {},
                                 elevation: 0,
                                 color: Colors.white,

@@ -11,6 +11,7 @@ class PrimaryButton extends StatelessWidget {
   final Color? buttonColor;
   final Function()? onTap;
   final Color? textColor;
+  final Color? borderColor;
   final bool isNeedBorder;
 
   PrimaryButton(
@@ -21,6 +22,7 @@ class PrimaryButton extends StatelessWidget {
     this.buttonColor,
     this.textColor = Colors.white,
     this.isNeedBorder = false,
+    this.borderColor,
   });
 
   @override
@@ -30,7 +32,7 @@ class PrimaryButton extends StatelessWidget {
         backgroundColor: buttonColor,
         side: !isNeedBorder
             ? BorderSide.none
-            : BorderSide(color: Colors.white, width: 2.0),
+            : BorderSide(color: borderColor ?? Colors.white, width: 2.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius ?? 30.0),
         ),

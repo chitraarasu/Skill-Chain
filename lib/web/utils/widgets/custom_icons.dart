@@ -133,13 +133,17 @@ class CustomIcons extends StatelessWidget {
                                     fontWeight: bold,
                                     fontColor: colorGrey1,
                                   ),
-                                  vSpace(5),
+                                  vSpace(20),
                                   Row(
                                     children: [
                                       Expanded(
                                         child: Container(
-                                          decoration:
-                                              BoxDecoration(borderRadius: Bo),
+                                          height: 35,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            border: Border.all(width: 1),
+                                          ),
                                           child: DropdownButton<String>(
                                             items: <String>['A', 'B', 'C', 'D']
                                                 .map((String value) {
@@ -172,6 +176,7 @@ class CustomIcons extends StatelessWidget {
                                 "Save",
                                 buttonColor: brown,
                                 radius: 10,
+                                textColor: Colors.black,
                               ),
                             ),
                           ],

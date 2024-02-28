@@ -10,8 +10,12 @@ import '../../../utils/widgets/widgets.dart';
 
 class Verification extends StatelessWidget {
   final bool isFromHome;
+  final bool isForAddSkill;
 
-  Verification({this.isFromHome = false});
+  Verification({
+    this.isFromHome = false,
+    this.isForAddSkill = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +23,7 @@ class Verification extends StatelessWidget {
       padding: isFromHome ? EdgeInsets.zero : EdgeInsets.all(40.0),
       child: Container(
         decoration: BoxDecoration(
-          color: lightBlue,
+          color: isForAddSkill ? brown : lightBlue,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
@@ -174,7 +178,7 @@ class Verification extends StatelessWidget {
                           children: [
                             Expanded(
                               child: PrimaryButton(
-                                "Verify",
+                                isForAddSkill ? "Add Skill" : "Verify",
                                 buttonColor: darkBlue,
                                 radius: 10,
                               ),
