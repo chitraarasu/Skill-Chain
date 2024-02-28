@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:skill_chain/web/screens/dashboard/pages/users.dart';
 import 'package:skill_chain/web/utils/buttons/primary_button.dart';
 import 'package:skill_chain/web/utils/ui_element.dart';
 import 'package:skill_chain/web/utils/widgets/custom_textfield.dart';
@@ -181,6 +183,136 @@ class Verification extends StatelessWidget {
                                 isForAddSkill ? "Add Skill" : "Verify",
                                 buttonColor: darkBlue,
                                 radius: 10,
+                                onTap: () {
+                                  if (isForAddSkill) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (_) => AlertDialog(
+                                        insetPadding: EdgeInsets.zero,
+                                        contentPadding: EdgeInsets.zero,
+                                        content: SingleChildScrollView(
+                                          child: Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .4,
+                                            padding: EdgeInsets.all(20),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                            ),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Spacer(),
+                                                    IconButton(
+                                                      onPressed: () {
+                                                        Get.back();
+                                                      },
+                                                      icon: CircleAvatar(
+                                                        radius: 12,
+                                                        backgroundColor: brown,
+                                                        child: Icon(
+                                                          Icons.close,
+                                                          size: 18,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  width: 300,
+                                                  height: 300,
+                                                  child: Image(
+                                                    image: AssetImage(
+                                                      assetImage(
+                                                          "skills_added"),
+                                                    ),
+                                                    width: 300,
+                                                  ),
+                                                ),
+                                                vSpace(15),
+                                                getCustomFont(
+                                                  "Skills Added Successfully!",
+                                                  24,
+                                                  fontWeight: bold,
+                                                  fontColor: darkBlue,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    showDialog(
+                                      context: context,
+                                      builder: (_) => AlertDialog(
+                                        insetPadding: EdgeInsets.zero,
+                                        contentPadding: EdgeInsets.zero,
+                                        content: SingleChildScrollView(
+                                          child: Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .6,
+                                            padding: EdgeInsets.all(20),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                            ),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: getCustomFont(
+                                                        "Verification Details",
+                                                        24,
+                                                        fontWeight: bold,
+                                                        fontColor: Colors.black,
+                                                      ),
+                                                    ),
+                                                    IconButton(
+                                                      onPressed: () {
+                                                        Get.back();
+                                                      },
+                                                      icon: CircleAvatar(
+                                                        radius: 12,
+                                                        backgroundColor: brown,
+                                                        child: Icon(
+                                                          Icons.close,
+                                                          size: 18,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                                vSpace(15),
+                                                ...List.generate(
+                                                  4,
+                                                  (index) => UsersTile(
+                                                      isFromVerifySkill: true),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
                               ),
                             ),
                           ],

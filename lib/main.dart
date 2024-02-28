@@ -42,21 +42,25 @@ class MyApp extends StatelessWidget {
           page: () => WebDashboard(1),
         ),
         GetPage(
-          name: Screens.institute,
+          name: Screens.addSkill,
           page: () => WebDashboard(2),
         ),
         GetPage(
-          name: Screens.skillApproval,
+          name: Screens.institute,
           page: () => WebDashboard(3),
         ),
         GetPage(
-          name: Screens.users,
+          name: Screens.skillApproval,
           page: () => WebDashboard(4),
         ),
         GetPage(
-          name: Screens.settings,
+          name: Screens.users,
           page: () => WebDashboard(5),
         ),
+        // GetPage(
+        //   name: Screens.settings,
+        //   page: () => WebDashboard(5),
+        // ),
       ],
     );
   }
