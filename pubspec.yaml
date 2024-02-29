@@ -41,6 +41,7 @@ dependencies:
   get_storage: ^2.1.1
   fluttertoast: ^8.2.2
   url_strategy: ^0.2.0
+  auto_height_grid_view: ^1.0.0
 
 dev_dependencies:
   flutter_test:

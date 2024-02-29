@@ -16,7 +16,7 @@ class SkillApproval extends StatelessWidget {
     "Institute",
     "Skill Details",
     "Reg No",
-    "Score",
+    "Certificate",
     "Options",
   ];
 
@@ -142,14 +142,24 @@ class SkillApproval extends StatelessWidget {
                             ),
                           ),
                           Expanded(
-                            child: getCustomFont(
-                              "98%",
-                              13,
-                              fontColor: colorGrey1,
-                              fontWeight: medium,
-                              maxLine: 1,
-                              textAlign: TextAlign.center,
-                              txtHeight: 0,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.link,
+                                  size: 17,
+                                ),
+                                hSpace(5),
+                                getCustomFont(
+                                  "Open",
+                                  13,
+                                  fontColor: colorGrey1,
+                                  fontWeight: medium,
+                                  maxLine: 1,
+                                  textAlign: TextAlign.center,
+                                  txtHeight: 0,
+                                ),
+                              ],
                             ),
                           ),
                           Expanded(
