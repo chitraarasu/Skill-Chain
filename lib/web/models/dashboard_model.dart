@@ -16,12 +16,15 @@ class DashboardModel {
   DashboardModel(this.image, this.text, this.route, this.screen);
 }
 
+DashboardModel institute =
+    DashboardModel("institution", "Institute", Screens.institute, Institute());
+
 List<DashboardModel> dashboardList = [
   DashboardModel("home", "Dashboard", Screens.dashboard, Home()),
   DashboardModel("test", "Verification", Screens.verification, Verification()),
   DashboardModel("add_skill", "Add Skill", Screens.addSkill,
       Verification(isForAddSkill: true)),
-  DashboardModel("institution", "Institute", Screens.institute, Institute()),
+  institute,
   DashboardModel("skill_approve", "Skill Approval", Screens.skillApproval,
       SkillApproval()),
   DashboardModel("user_management", "Users", Screens.users, Users()),

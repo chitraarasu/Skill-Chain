@@ -15,15 +15,21 @@ class WebAuthController extends GetxController {
   RxBool isLoggedIn = RxBool(false);
   Rxn<Uint8List> selectedImages = Rxn<Uint8List>();
   Rxn<User> loggedInUser = Rxn();
+  Rxn<String> selectedAccess = Rxn();
 
   TextEditingController email =
       TextEditingController(text: "admin@skillchain.com");
   TextEditingController password = TextEditingController(text: "123456");
 
+  TextEditingController name = TextEditingController();
+  TextEditingController address = TextEditingController();
+  TextEditingController verificationId = TextEditingController();
+
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
+    print(Get.currentRoute);
+
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       print(user);
       loggedInUser.value = user;
@@ -69,8 +75,25 @@ class WebAuthController extends GetxController {
     }
   }
 
-  bool validate() {
-    hideKeyboard();
+  bool validate({bool isSignUp = false}) {
+    if (isSignUp) {
+      if (name.text.trim().isEmpty) {
+        webToast("Please enter valid institute name!");
+        return false;
+      }
+      if (address.text.trim().isEmpty) {
+        webToast("Please enter valid address!");
+        return false;
+      }
+      if (verificationId.text.trim().isEmpty) {
+        webToast("Please enter valid verification id!");
+        return false;
+      }
+      if (selectedAccess.value == null) {
+        webToast("Please select one access!");
+        return false;
+      }
+    }
     if (!email.text.trim().isEmail) {
       webToast("Please enter valid emailId!");
       return false;
@@ -115,52 +138,65 @@ class WebAuthController extends GetxController {
     }
   }
 
-  // signUp() async {
-  //   if (validate(withName: true)) {
-  //     LoadingManager.shared.showLoading();
-  //     try {
-  //       final credential =
-  //           await FirebaseAuth.instance.createUserWithEmailAndPassword(
-  //         email: emailId.text,
-  //         password: password.text,
-  //       );
-  //       User? user = FirebaseAuth.instance.currentUser;
-  //       if (user != null) {
-  //         await user.updateDisplayName(name.text);
-  //         await user.reload();
-  //         FirebaseFirestore.instance.collection("users").doc(user.uid).set({
-  //           "username": name.text,
-  //           "uid": user.uid,
-  //           "photo_url": user.photoURL,
-  //           "likes": 0,
-  //           "places": 0,
-  //           "views": 0,
-  //           "created_at": Timestamp.now(),
-  //         });
-  //         loggedInUser.value = FirebaseAuth.instance.currentUser;
-  //         print(FirebaseAuth.instance.currentUser);
-  //       }
-  //
-  //       Get.back();
-  //
-  //       emailId.controller.clear();
-  //       password.controller.clear();
-  //       name.controller.clear();
-  //     } on FirebaseAuthException catch (e) {
-  //       print(e.code);
-  //       if (e.code == 'weak-password') {
-  //         ToastManager.shared.show("The password provided is too weak.");
-  //       } else if (e.code == 'email-already-in-use') {
-  //         ToastManager.shared
-  //             .show("The account already exists for that email.");
-  //       }
-  //     } catch (e) {
-  //       print(e);
-  //     } finally {
-  //       LoadingManager.shared.hideLoading();
-  //     }
-  //   }
-  // }
+  addInstitute() async {
+    if (validate(isSignUp: true)) {
+      LoadingManager.shared.showLoading();
+      try {
+        const url =
+            'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyADVUZ9MmHJerZUtFdDss5kv9-0JJFg45g';
+
+        // final response = await http.post(
+        //   Uri.parse(url),
+        //   body: json.encode(
+        //     {
+        //       'email': email,
+        //       'password': password,
+        //       'returnSecureToken': true,
+        //     },
+        //   ),
+        // );
+        // final responseData = json.decode(response.body);
+
+        User? user = FirebaseAuth.instance.currentUser;
+        print(user);
+        // if (user != null) {
+        //   await user.updateDisplayName(name.text);
+        //   await user.reload();
+        //   FirebaseFirestore.instance.collection("users").doc(user.uid).set({
+        //     "username": name.text,
+        //     "uid": user.uid,
+        //     "photo_url": user.photoURL,
+        //     "likes": 0,
+        //     "places": 0,
+        //     "views": 0,
+        //     "created_at": Timestamp.now(),
+        //   });
+        //   loggedInUser.value = FirebaseAuth.instance.currentUser;
+        //   print(FirebaseAuth.instance.currentUser);
+        // }
+
+        Get.back();
+
+        email.clear();
+        password.clear();
+        name.clear();
+        verificationId.clear();
+        address.clear();
+        selectedAccess.value = null;
+      } on FirebaseAuthException catch (e) {
+        print(e.code);
+        if (e.code == 'weak-password') {
+          webToast("The password provided is too weak.");
+        } else if (e.code == 'email-already-in-use') {
+          webToast("The account already exists for that email.");
+        }
+      } catch (e) {
+        print(e);
+      } finally {
+        LoadingManager.shared.hideLoading();
+      }
+    }
+  }
 
   logout() async {
     await FirebaseAuth.instance.signOut();

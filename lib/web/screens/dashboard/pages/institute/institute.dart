@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:skill_chain/web/utils/buttons/primary_button.dart';
 import 'package:skill_chain/web/utils/color_manager.dart';
@@ -8,9 +6,9 @@ import 'package:skill_chain/web/utils/ui_element.dart';
 import 'package:skill_chain/web/utils/widgets/widgets.dart';
 
 import '../../../../utils/resizer/fetch_pixels.dart';
-import '../../../../utils/widgets/custom_icons.dart';
 import '../../../../utils/widgets/custom_profile.dart';
 import '../../../../utils/widgets/custom_textfield.dart';
+import 'custom_icons.dart';
 
 class Institute extends StatelessWidget {
   List<String> topics = [
@@ -20,13 +18,6 @@ class Institute extends StatelessWidget {
     "Verification",
     "Access",
     "Options",
-  ];
-
-  List<String> access = [
-    "Admin",
-    "Edit",
-    "Manage",
-    "View",
   ];
 
   Widget AddCenter({required bool isNeedCenter, required Widget child}) {
@@ -61,6 +52,9 @@ class Institute extends StatelessWidget {
                   children: [
                     PrimaryButton(
                       "Add Institute",
+                      onTap: () {
+                        addInstitute(context);
+                      },
                       buttonColor: Colors.white,
                       radius: 20,
                       textColor: colorGrey1,
@@ -189,7 +183,7 @@ class Institute extends StatelessWidget {
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 6, horizontal: 12),
                                   child: getCustomFont(
-                                    access[Random().nextInt(access.length)],
+                                    "10th",
                                     12,
                                     fontColor: darkGreen,
                                     fontWeight: bold,
