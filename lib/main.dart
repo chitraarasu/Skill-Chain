@@ -1,13 +1,23 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:skill_chain/web/controller/binder.dart';
+import 'package:skill_chain/web/controller/web_auth_controller.dart';
 import 'package:skill_chain/web/screens/dashboard/web_dashboard.dart';
 import 'package:skill_chain/web/screens/web_authentication.dart';
 import 'package:skill_chain/web/utils/resizer/fetch_pixels.dart';
 import 'package:skill_chain/web/utils/ui_element.dart';
 import 'package:url_strategy/url_strategy.dart';
 
-void main() {
+import 'firebase_options.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   setPathUrlStrategy();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  Get.put(WebAuthController());
   runApp(const MyApp());
 }
 
@@ -17,6 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FetchPixels(context);
+    WebAuthController webAuth = Get.find();
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Skill Chain',
@@ -27,7 +38,8 @@ class MyApp extends StatelessWidget {
             thickness: MaterialStateProperty.all(0),
           )),
       // home: const WebAuthentication(),
-      initialRoute: Screens.root,
+      initialBinding: WebBinder(),
+      initialRoute: webAuth.isLoggedIn.value ? Screens.dashboard : Screens.root,
       getPages: [
         GetPage(
           name: Screens.root,

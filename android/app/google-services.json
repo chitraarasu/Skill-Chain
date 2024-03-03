@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "21091457285",
+    "project_id": "skill-chain",
+    "storage_bucket": "skill-chain.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:21091457285:android:f6cb9c4bed1cf400c63f6c",
+        "android_client_info": {
+          "package_name": "com.skill.chain"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADVUZ9MmHJerZUtFdDss5kv9-0JJFg45g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

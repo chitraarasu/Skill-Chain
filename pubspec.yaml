@@ -39,9 +39,15 @@ dependencies:
   get: ^4.6.1
   lottie: ^2.4.0
   get_storage: ^2.1.1
-  fluttertoast: ^8.2.2
+  fluttertoast: ^8.2.4
   url_strategy: ^0.2.0
   auto_height_grid_view: ^1.0.0
+  firebase_core: ^2.25.5
+  firebase_auth: ^4.17.6
+  loading_indicator: ^3.1.1
+  file_picker: ^6.1.1
+  firebase_storage: ^11.6.7
+  cloud_firestore: ^4.15.6
 
 dev_dependencies:
   flutter_test:

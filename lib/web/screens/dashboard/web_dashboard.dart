@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skill_chain/web/utils/color_manager.dart';
 import 'package:skill_chain/web/utils/ui_element.dart';
 import 'package:skill_chain/web/utils/widgets/widgets.dart';
 
+import '../../controller/web_auth_controller.dart';
 import '../../models/dashboard_model.dart';
 import '../../utils/font_manager.dart';
 import '../../utils/web_support.dart';
@@ -13,9 +15,12 @@ class WebDashboard extends StatelessWidget {
 
   WebDashboard(this.index);
 
+  WebAuthController webAuth = Get.find();
+
   @override
   Widget build(BuildContext context) {
     Rx<int> selectedItem = Rx<int>(index);
+    User? userData = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -39,28 +44,57 @@ class WebDashboard extends StatelessWidget {
                         Stack(
                           alignment: Alignment.bottomRight,
                           children: [
-                            CircleAvatar(
-                              radius: 45,
-                              backgroundColor: brown1,
-                              backgroundImage: NetworkImage(
-                                  "https://images.unsplash.com/photo-1593085512500-5d55148d6f0d"),
-                            ),
-                            Container(
-                              width: 30,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.1),
-                                    spreadRadius: 1,
-                                    blurRadius: 20,
-                                    offset: Offset(0, 0),
-                                  ),
-                                ],
+                            Obx(
+                              () => CircleAvatar(
+                                radius: 45,
+                                backgroundColor: brown1,
+                                backgroundImage: (webAuth
+                                            .selectedImages.value !=
+                                        null
+                                    ? MemoryImage(webAuth.selectedImages.value!)
+                                    : userData?.photoURL == null
+                                        ? null
+                                        : NetworkImage(
+                                            userData?.photoURL ?? "",
+                                          )) as ImageProvider<Object>?,
+                                child: webAuth.selectedImages.value != null
+                                    ? null
+                                    : userData?.photoURL == null
+                                        ? Image(
+                                            image: AssetImage(
+                                              assetImage("profile_dummy"),
+                                            ),
+                                          )
+                                        : null,
                               ),
-                              child: Icon(Icons.edit, size: 15),
+                            ),
+                            // CircleAvatar(
+                            //   radius: 45,
+                            //   backgroundColor: brown1,
+                            //   backgroundImage: NetworkImage(
+                            //       "https://images.unsplash.com/photo-1593085512500-5d55148d6f0d"),
+                            // ),
+                            GestureDetector(
+                              onTap: () {
+                                webAuth.pickImages();
+                              },
+                              child: Container(
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.1),
+                                      spreadRadius: 1,
+                                      blurRadius: 20,
+                                      offset: Offset(0, 0),
+                                    ),
+                                  ],
+                                ),
+                                child: Icon(Icons.edit, size: 15),
+                              ),
                             ),
                           ],
                         ),
@@ -128,7 +162,7 @@ class WebDashboard extends StatelessWidget {
                   vSpace(20),
                   GestureDetector(
                     onTap: () {
-                      Get.offAndToNamed(Screens.root);
+                      webAuth.logout();
                     },
                     child: Row(
                       children: [

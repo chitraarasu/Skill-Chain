@@ -85,3 +85,15 @@ void showCustomToast(String texts, BuildContext context) {
     fontSize: 12.0,
   );
 }
+
+void webToast(String texts) {
+  Fluttertoast.showToast(
+    msg: texts,
+    toastLength: Toast.LENGTH_LONG,
+    gravity: ToastGravity.TOP,
+    timeInSecForIosWeb: 2,
+    fontSize: 16.0,
+    webShowClose: true,
+    webBgColor: "linear-gradient(to right, #EC5938, #EC5938)",
+  );
+}

@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skill_chain/web/utils/resizer/fetch_pixels.dart';
 import 'package:skill_chain/web/utils/ui_element.dart';
-import 'package:skill_chain/web/utils/web_support.dart';
 import 'package:skill_chain/web/utils/widgets/custom_textfield.dart';
 import 'package:skill_chain/web/utils/widgets/widgets.dart';
 
+import '../controller/web_auth_controller.dart';
 import '../utils/buttons/primary_button.dart';
 import '../utils/color_manager.dart';
 import '../utils/frosted_glass.dart';
 
 class WebAuthentication extends StatelessWidget {
-  const WebAuthentication({super.key});
+  WebAuthController webAuth = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +72,7 @@ class WebAuthentication extends StatelessWidget {
                             fontColor: colorGrey1,
                           ),
                           vSpace(5),
-                          CustomTextField(),
+                          CustomTextField(controller: webAuth.email),
                           vSpace(15),
                           getCustomFont(
                             "Password",
@@ -83,7 +83,8 @@ class WebAuthentication extends StatelessWidget {
                             fontColor: colorGrey1,
                           ),
                           vSpace(5),
-                          CustomTextField(),
+                          CustomTextField(
+                              controller: webAuth.password, hide: true),
                           vSpace(30),
                           SizedBox(
                             width: double.infinity,
@@ -91,10 +92,7 @@ class WebAuthentication extends StatelessWidget {
                               "Login",
                               buttonColor: brown,
                               radius: 10,
-                              onTap: () {
-                                Get.offAndToNamed(Screens.dashboard);
-                                setWebTitleAndUrl("Login", "");
-                              },
+                              onTap: webAuth.login,
                             ),
                           ),
                           vSpace(15),
