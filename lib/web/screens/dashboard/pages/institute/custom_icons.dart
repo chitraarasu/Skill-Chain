@@ -126,10 +126,57 @@ addInstitute(context) {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            CircleAvatar(
-                              radius: 80,
-                              backgroundImage: NetworkImage(
-                                  "https://images.unsplash.com/photo-1593085512500-5d55148d6f0d"),
+                            Stack(
+                              children: [
+                                Obx(
+                                  () => CircleAvatar(
+                                    radius: 80,
+                                    backgroundColor: brown1,
+                                    backgroundImage: (webAuth
+                                                .selectedImages.value !=
+                                            null
+                                        ? MemoryImage(
+                                            webAuth.selectedImages.value!)
+                                        : "userData?.photoURL" == null
+                                            ? null
+                                            : NetworkImage(
+                                                "https://images.unsplash.com/photo-1593085512500-5d55148d6f0d"
+                                                // userData?.photoURL ?? "",
+                                                )) as ImageProvider<Object>?,
+                                    // child: webAuth.selectedImages.value != null
+                                    //     ? null
+                                    //     : userData?.photoURL == null
+                                    //         ? Image(
+                                    //             image: AssetImage(
+                                    //               assetImage("profile_dummy"),
+                                    //             ),
+                                    //           )
+                                    //         : null,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    webAuth.pickImages(isForIndustry: true);
+                                  },
+                                  child: Container(
+                                    width: 30,
+                                    height: 30,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.1),
+                                          spreadRadius: 1,
+                                          blurRadius: 20,
+                                          offset: Offset(0, 0),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Icon(Icons.edit, size: 15),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),

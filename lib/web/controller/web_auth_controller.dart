@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -14,6 +16,7 @@ import '../utils/web_support.dart';
 class WebAuthController extends GetxController {
   RxBool isLoggedIn = RxBool(false);
   Rxn<Uint8List> selectedImages = Rxn<Uint8List>();
+  Rxn<Uint8List> selectedInstituteLogo = Rxn<Uint8List>();
   Rxn<User> loggedInUser = Rxn();
   Rxn<String> selectedAccess = Rxn();
 
@@ -37,14 +40,19 @@ class WebAuthController extends GetxController {
     });
   }
 
-  pickImages() async {
+  pickImages({bool isForIndustry = false}) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.image,
     );
     if (result != null) {
-      selectedImages.value = result.files.first.bytes;
-      selectedImages.refresh();
-      // updateProfile();
+      if (isForIndustry) {
+        selectedInstituteLogo.value = result.files.first.bytes;
+        selectedInstituteLogo.refresh();
+      } else {
+        selectedImages.value = result.files.first.bytes;
+        selectedImages.refresh();
+        // updateProfile();
+      }
     } else {}
   }
 
@@ -145,44 +153,56 @@ class WebAuthController extends GetxController {
         const url =
             'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyADVUZ9MmHJerZUtFdDss5kv9-0JJFg45g';
 
-        // final response = await http.post(
-        //   Uri.parse(url),
-        //   body: json.encode(
-        //     {
-        //       'email': email,
-        //       'password': password,
-        //       'returnSecureToken': true,
-        //     },
-        //   ),
-        // );
-        // final responseData = json.decode(response.body);
+        final response = await Dio().post(
+          url,
+          data: json.encode(
+            {
+              'email': email.text,
+              'password': password.text,
+              'returnSecureToken': true
+            },
+          ),
+        );
+        print(response.data);
+        print(response.statusCode);
 
-        User? user = FirebaseAuth.instance.currentUser;
-        print(user);
-        // if (user != null) {
-        //   await user.updateDisplayName(name.text);
-        //   await user.reload();
-        //   FirebaseFirestore.instance.collection("users").doc(user.uid).set({
-        //     "username": name.text,
-        //     "uid": user.uid,
-        //     "photo_url": user.photoURL,
-        //     "likes": 0,
-        //     "places": 0,
-        //     "views": 0,
-        //     "created_at": Timestamp.now(),
-        //   });
-        //   loggedInUser.value = FirebaseAuth.instance.currentUser;
-        //   print(FirebaseAuth.instance.currentUser);
-        // }
+        if (response.data != null) {
+          String localId = response.data["localId"];
+          String imageUrl = "";
 
-        Get.back();
+          if (selectedInstituteLogo.value != null) {
+            Reference storageReference = FirebaseStorage.instance
+                .ref()
+                .child('user_profile/$localId.png');
+            UploadTask uploadTask =
+                storageReference.putData(selectedInstituteLogo.value!);
 
-        email.clear();
-        password.clear();
-        name.clear();
-        verificationId.clear();
-        address.clear();
-        selectedAccess.value = null;
+            await uploadTask.whenComplete(() async {
+              imageUrl = await storageReference.getDownloadURL();
+            });
+          }
+
+          FirebaseFirestore.instance.collection("users").doc(localId).set({
+            "uid": localId,
+            "logo": imageUrl,
+            "institute_name": name.text,
+            "institute_address": address.text,
+            "institute_id": verificationId.text,
+            "institute_access": selectedAccess,
+            "institute_email": email.text,
+            "created_at": Timestamp.now(),
+          });
+
+          Get.back();
+
+          email.clear();
+          password.clear();
+          name.clear();
+          verificationId.clear();
+          address.clear();
+          selectedAccess.value = null;
+          selectedInstituteLogo.value = null;
+        }
       } on FirebaseAuthException catch (e) {
         print(e.code);
         if (e.code == 'weak-password') {
@@ -192,6 +212,9 @@ class WebAuthController extends GetxController {
         }
       } catch (e) {
         print(e);
+        if (e.toString().contains("validateStatus")) {
+          webToast("Email already exist!");
+        }
       } finally {
         LoadingManager.shared.hideLoading();
       }
