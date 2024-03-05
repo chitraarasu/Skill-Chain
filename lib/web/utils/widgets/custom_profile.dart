@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:skill_chain/web/utils/ui_element.dart';
 import 'package:universal_web_image/universal_web_image.dart';
 
 import '../color_manager.dart';
@@ -20,11 +21,18 @@ class CustomProfile extends StatelessWidget {
           SizedBox(
             width: 55,
             height: 55,
-            child: Center(
-              child: ClipOval(
-                child: NetImage(image ??
-                    "https://images.unsplash.com/photo-1593085512500-5d55148d6f0d"),
-              ),
+            child: ClipOval(
+              child: image == null
+                  ? Container(
+                      color: brown1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Image(
+                          image: AssetImage(assetImage("profile_dummy")),
+                        ),
+                      ),
+                    )
+                  : NetImage(image ?? ""),
             ),
           ),
         ],

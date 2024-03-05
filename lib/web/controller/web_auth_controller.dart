@@ -191,9 +191,9 @@ class WebAuthController extends GetxController {
           }
 
           if (data != null) {
-            FirebaseFirestore.instance
+            await FirebaseFirestore.instance
                 .collection("users")
-                .doc(data.uid)
+                .doc(localId)
                 .update({
               "logo": imageUrl,
               "institute_name": name.text,
@@ -201,10 +201,14 @@ class WebAuthController extends GetxController {
               "institute_id": verificationId.text,
               "institute_access": selectedAccess.value,
               "institute_email": email.text,
+              "password": password.text,
               "created_at": Timestamp.now(),
             });
           } else {
-            FirebaseFirestore.instance.collection("users").doc(localId).set({
+            await FirebaseFirestore.instance
+                .collection("users")
+                .doc(localId)
+                .set({
               "uid": localId,
               "logo": imageUrl,
               "institute_name": name.text,
@@ -212,19 +216,20 @@ class WebAuthController extends GetxController {
               "institute_id": verificationId.text,
               "institute_access": selectedAccess.value,
               "institute_email": email.text,
+              "password": password.text,
               "created_at": Timestamp.now(),
             });
-
-            Get.back();
-
-            email.clear();
-            password.clear();
-            name.clear();
-            verificationId.clear();
-            address.clear();
-            selectedAccess.value = null;
-            selectedInstituteLogo.value = null;
           }
+
+          Get.back();
+
+          email.clear();
+          password.clear();
+          name.clear();
+          verificationId.clear();
+          address.clear();
+          selectedAccess.value = null;
+          selectedInstituteLogo.value = null;
         }
       } on FirebaseAuthException catch (e) {
         print(e.code);

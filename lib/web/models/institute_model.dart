@@ -42,7 +42,7 @@ class InstituteModel {
         createdAt: json["created_at"],
         instituteName: json["institute_name"],
         instituteEmail: json["institute_email"],
-        logo: json["logo"],
+        logo: json["logo"].toString().isEmpty ? null : json["logo"],
         password: json["password"],
       );
 

@@ -28,6 +28,7 @@ addInstitute(context, {InstituteModel? data, bool isEdit = false}) {
   webAuth.verificationId.text = data?.instituteId ?? "";
   webAuth.selectedAccess.value = data?.instituteAccess;
   webAuth.password.text = data?.password ?? "";
+  webAuth.selectedInstituteLogo.value = null;
 
   showDialog(
     context: context,
@@ -151,14 +152,18 @@ addInstitute(context, {InstituteModel? data, bool isEdit = false}) {
                                     width: 160,
                                     height: 160,
                                     child: ClipOval(
-                                      child:
-                                          webAuth.selectedInstituteLogo.value !=
-                                                  null
-                                              ? Image.memory(webAuth
-                                                  .selectedInstituteLogo.value!)
-                                              : data?.logo == null
-                                                  ? null
-                                                  : NetImage(data?.logo ?? ""),
+                                      child: Container(
+                                        color: brown1,
+                                        child: webAuth.selectedInstituteLogo
+                                                    .value !=
+                                                null
+                                            ? Image.memory(webAuth
+                                                .selectedInstituteLogo.value!)
+                                            : data?.logo == null
+                                                ? Image.asset(
+                                                    assetImage("profile_dummy"))
+                                                : NetImage(data?.logo ?? ""),
+                                      ),
                                     ),
                                   ),
                                 ),
