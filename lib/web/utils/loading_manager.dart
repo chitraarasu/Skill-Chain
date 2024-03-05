@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:skill_chain/web/utils/ui_element.dart';
+import 'package:skill_chain/web/utils/widgets/widgets.dart';
+
+import 'font_manager.dart';
 
 class LoadingManager {
   static final shared = LoadingManager();
@@ -79,22 +82,21 @@ const kLoading = Center(
   ),
 );
 
-// getErrorMessage(msg) {
-//   return Center(
-//     child: Text(
-//       msg == null || msg == "null" || msg.toString().contains("subtype")
-//           ? "Your offers are waiting ! Steal the deals after some time."
-//           : msg.toString().contains("SocketException")
-//           ? "Please check your internet connection!"
-//           : msg.toString().contains("Exception")
-//           ? "Your offers are waiting ! Steal the deals after some time."
-//           : msg.toString(),
-//       style: TextStyle(
-//         color: textColor2,
-//         fontWeight:
-//         msg.toString().contains("brand is coming soon") ? semiBold : null,
-//       ),
-//       textAlign: TextAlign.center,
-//     ),
-//   );
-// }
+getErrorMessage(msg) {
+  return Center(
+    child: getCustomFont(
+      msg == null || msg == "null" || msg.toString().contains("subtype")
+          ? "Your offers are waiting ! Steal the deals after some time."
+          : msg.toString().contains("SocketException")
+              ? "Please check your internet connection!"
+              : msg.toString().contains("Exception")
+                  ? "Your offers are waiting ! Steal the deals after some time."
+                  : msg.toString(),
+      16,
+      fontColor: Colors.black,
+      fontWeight:
+          msg.toString().contains("brand is coming soon") ? semiBold : regular,
+      textAlign: TextAlign.center,
+    ),
+  );
+}

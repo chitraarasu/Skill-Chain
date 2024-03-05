@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../font_manager.dart';
-import '../resizer/fetch_pixels.dart';
 import '../widgets/widgets.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -42,8 +41,8 @@ class PrimaryButton extends StatelessWidget {
       child: Padding(
         padding: padding ??
             EdgeInsets.symmetric(
-              vertical: FetchPixels.getPixelHeight(12),
-              horizontal: FetchPixels.getPixelWidth(17),
+              vertical: 12,
+              horizontal: 17,
             ),
         child: getCustomFont(
           title,

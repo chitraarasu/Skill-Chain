@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:skill_chain/web/utils/font_manager.dart';
-import 'package:skill_chain/web/utils/resizer/fetch_pixels.dart';
+
+import '../resizer/fetch_pixels.dart';
 
 Widget getCustomFont(String text, double fontSize,
     {Color? fontColor,

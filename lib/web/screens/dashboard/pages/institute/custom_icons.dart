@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skill_chain/web/controller/web_auth_controller.dart';
+import 'package:skill_chain/web/utils/widgets/custom_profile.dart';
 
+import '../../../../models/institute_model.dart';
 import '../../../../utils/buttons/primary_button.dart';
 import '../../../../utils/color_manager.dart';
 import '../../../../utils/font_manager.dart';
@@ -9,7 +11,7 @@ import '../../../../utils/ui_element.dart';
 import '../../../../utils/widgets/custom_textfield.dart';
 import '../../../../utils/widgets/widgets.dart';
 
-addInstitute(context) {
+addInstitute(context, {InstituteModel? data, bool isEdit = false}) {
   List<String> access = [
     "10th",
     "12th",
@@ -19,6 +21,13 @@ addInstitute(context) {
   ];
 
   WebAuthController webAuth = Get.find();
+
+  webAuth.name.text = data?.instituteName ?? "";
+  webAuth.email.text = data?.instituteEmail ?? "";
+  webAuth.address.text = data?.instituteAddress ?? "";
+  webAuth.verificationId.text = data?.instituteId ?? "";
+  webAuth.selectedAccess.value = data?.instituteAccess;
+  webAuth.password.text = data?.password ?? "";
 
   showDialog(
     context: context,
@@ -81,6 +90,7 @@ addInstitute(context) {
                         vSpace(5),
                         CustomTextField(
                           controller: webAuth.name,
+                          enable: isEdit,
                         ),
                         vSpace(15),
                         getCustomFont(
@@ -94,6 +104,7 @@ addInstitute(context) {
                           maxLine: 3,
                           height: null,
                           controller: webAuth.address,
+                          enable: isEdit,
                         ),
                         vSpace(15),
                         getCustomFont(
@@ -103,7 +114,10 @@ addInstitute(context) {
                           fontColor: colorGrey1,
                         ),
                         vSpace(5),
-                        CustomTextField(controller: webAuth.verificationId),
+                        CustomTextField(
+                          controller: webAuth.verificationId,
+                          enable: isEdit,
+                        ),
                         vSpace(15),
                         getCustomFont(
                           "Email Id",
@@ -112,7 +126,10 @@ addInstitute(context) {
                           fontColor: colorGrey1,
                         ),
                         vSpace(5),
-                        CustomTextField(controller: webAuth.email),
+                        CustomTextField(
+                          controller: webAuth.email,
+                          enable: data == null,
+                        ),
                       ],
                     ),
                   ),
@@ -127,55 +144,56 @@ addInstitute(context) {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Stack(
+                              alignment: Alignment.bottomRight,
                               children: [
                                 Obx(
-                                  () => CircleAvatar(
-                                    radius: 80,
-                                    backgroundColor: brown1,
-                                    backgroundImage: (webAuth
-                                                .selectedImages.value !=
-                                            null
-                                        ? MemoryImage(
-                                            webAuth.selectedImages.value!)
-                                        : "userData?.photoURL" == null
-                                            ? null
-                                            : NetworkImage(
-                                                "https://images.unsplash.com/photo-1593085512500-5d55148d6f0d"
-                                                // userData?.photoURL ?? "",
-                                                )) as ImageProvider<Object>?,
-                                    // child: webAuth.selectedImages.value != null
-                                    //     ? null
-                                    //     : userData?.photoURL == null
-                                    //         ? Image(
-                                    //             image: AssetImage(
-                                    //               assetImage("profile_dummy"),
-                                    //             ),
-                                    //           )
-                                    //         : null,
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    webAuth.pickImages(isForIndustry: true);
-                                  },
-                                  child: Container(
-                                    width: 30,
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(50),
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.1),
-                                          spreadRadius: 1,
-                                          blurRadius: 20,
-                                          offset: Offset(0, 0),
-                                        ),
-                                      ],
+                                  () => SizedBox(
+                                    width: 160,
+                                    height: 160,
+                                    child: ClipOval(
+                                      child:
+                                          webAuth.selectedInstituteLogo.value !=
+                                                  null
+                                              ? Image.memory(webAuth
+                                                  .selectedInstituteLogo.value!)
+                                              : data?.logo == null
+                                                  ? null
+                                                  : NetImage(data?.logo ?? ""),
                                     ),
-                                    child: Icon(Icons.edit, size: 15),
                                   ),
                                 ),
+                                if (isEdit)
+                                  Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        webAuth.pickImages(isForIndustry: true);
+                                      },
+                                      child: Container(
+                                        width: 30,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          color: darkBlue,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.1),
+                                              spreadRadius: 1,
+                                              blurRadius: 20,
+                                              offset: Offset(0, 0),
+                                            ),
+                                          ],
+                                        ),
+                                        child: Icon(
+                                          Icons.edit,
+                                          size: 15,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                               ],
                             ),
                           ],
@@ -214,9 +232,12 @@ addInstitute(context) {
                                         ),
                                       );
                                     }).toList(),
-                                    onChanged: (value) {
-                                      webAuth.selectedAccess.value = value;
-                                    },
+                                    onChanged: isEdit
+                                        ? (value) {
+                                            webAuth.selectedAccess.value =
+                                                value;
+                                          }
+                                        : null,
                                     value: webAuth.selectedAccess.value,
                                     isExpanded: true,
                                     underline: Container(),
@@ -238,6 +259,7 @@ addInstitute(context) {
                         vSpace(5),
                         CustomTextField(
                           hide: true,
+                          enable: data == null,
                           controller: webAuth.password,
                         ),
                       ],
@@ -245,20 +267,23 @@ addInstitute(context) {
                   ),
                 ],
               ),
-              vSpace(30),
-              Row(
-                children: [
-                  Expanded(
-                    child: PrimaryButton(
-                      "Save",
-                      buttonColor: brown,
-                      onTap: webAuth.addInstitute,
-                      radius: 10,
-                      textColor: Colors.black,
+              vSpace(isEdit ? 30 : 15),
+              if (isEdit)
+                Row(
+                  children: [
+                    Expanded(
+                      child: PrimaryButton(
+                        "Save",
+                        buttonColor: brown,
+                        onTap: () {
+                          webAuth.addInstitute(data: data);
+                        },
+                        radius: 10,
+                        textColor: Colors.black,
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
             ],
           ),
         ),
@@ -268,7 +293,9 @@ addInstitute(context) {
 }
 
 class CustomIcons extends StatelessWidget {
-  const CustomIcons({super.key});
+  final InstituteModel data;
+
+  CustomIcons(this.data);
 
   Widget getIcon(IconData icon, {Color? color, Function()? onTap}) {
     return GestureDetector(
@@ -292,9 +319,13 @@ class CustomIcons extends StatelessWidget {
         children: [
           getIcon(
             Icons.remove_red_eye_rounded,
-            onTap: () {},
+            onTap: () {
+              addInstitute(context, data: data, isEdit: false);
+            },
           ),
-          getIcon(Icons.edit),
+          getIcon(Icons.edit, onTap: () {
+            addInstitute(context, data: data, isEdit: true);
+          }),
           getIcon(Icons.delete, color: orange),
         ],
       ),

@@ -9,7 +9,6 @@ import 'package:skill_chain/web/utils/font_manager.dart';
 import 'package:skill_chain/web/utils/ui_element.dart';
 import 'package:skill_chain/web/utils/widgets/widgets.dart';
 
-import '../../../utils/resizer/fetch_pixels.dart';
 import '../../../utils/widgets/custom_profile.dart';
 import '../../../utils/widgets/custom_textfield.dart';
 import '../../../utils/widgets/top_categories.dart';
@@ -46,8 +45,8 @@ class Users extends StatelessWidget {
                       radius: 20,
                       textColor: colorGrey1,
                       padding: EdgeInsets.symmetric(
-                        vertical: FetchPixels.getPixelHeight(20),
-                        horizontal: FetchPixels.getPixelWidth(5),
+                        vertical: 20,
+                        horizontal: 5,
                       ),
                     ),
                   ],

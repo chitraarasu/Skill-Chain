@@ -6,6 +6,7 @@ import 'package:skill_chain/web/controller/web_auth_controller.dart';
 import 'package:skill_chain/web/screens/dashboard/web_dashboard.dart';
 import 'package:skill_chain/web/screens/web_authentication.dart';
 import 'package:skill_chain/web/utils/color_manager.dart';
+import 'package:skill_chain/web/utils/font_manager.dart';
 import 'package:skill_chain/web/utils/resizer/fetch_pixels.dart';
 import 'package:skill_chain/web/utils/ui_element.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Skill Chain',
       theme: ThemeData(
+        fontFamily: firstFont,
         colorScheme: ColorScheme.fromSeed(
           seedColor: brown,
           primary: brown,
