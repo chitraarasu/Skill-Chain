@@ -316,6 +316,8 @@ class CustomIcons extends StatelessWidget {
     );
   }
 
+  WebAuthController webAuth = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -331,7 +333,58 @@ class CustomIcons extends StatelessWidget {
           getIcon(Icons.edit, onTap: () {
             addInstitute(context, data: data, isEdit: true);
           }),
-          getIcon(Icons.delete, color: orange),
+          getIcon(Icons.delete, color: orange, onTap: () {
+            showDialog(
+              context: context,
+              barrierDismissible: true,
+              builder: (_) => AlertDialog(
+                insetPadding: EdgeInsets.zero,
+                contentPadding: EdgeInsets.zero,
+                elevation: 0,
+                content: SingleChildScrollView(
+                    child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    children: [
+                      getCustomFont("Are you sure you want to delete?", 18,
+                          fontWeight: FontWeight.w600),
+                      vSpace(15),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: PrimaryButton(
+                              "Cancel",
+                              onTap: () {
+                                Get.back();
+                              },
+                              radius: 10,
+                              textColor: brown,
+                              borderColor: brown,
+                              isNeedBorder: true,
+                              padding: EdgeInsets.all(5),
+                            ),
+                          ),
+                          hSpace(10),
+                          Expanded(
+                            child: PrimaryButton(
+                              "Delete",
+                              onTap: () {
+                                webAuth.deleteIndustry(data);
+                              },
+                              radius: 10,
+                              buttonColor: orange,
+                              textColor: Colors.white,
+                              padding: EdgeInsets.all(5),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )),
+              ),
+            );
+          }),
         ],
       ),
     );

@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skill_chain/web/utils/color_manager.dart';
+import 'package:skill_chain/web/utils/loading_manager.dart';
 import 'package:skill_chain/web/utils/ui_element.dart';
+import 'package:skill_chain/web/utils/widgets/custom_profile.dart';
 import 'package:skill_chain/web/utils/widgets/widgets.dart';
 
 import '../../controller/web_auth_controller.dart';
@@ -62,77 +65,108 @@ class WebDashboard extends StatelessWidget {
                           width: 120,
                         ),
                         Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Stack(
-                                alignment: Alignment.bottomRight,
-                                children: [
-                                  Obx(
-                                    () => CircleAvatar(
-                                      radius: 45,
-                                      backgroundColor: brown1,
-                                      backgroundImage: (webAuth
-                                                  .selectedImages.value !=
-                                              null
-                                          ? MemoryImage(
-                                              webAuth.selectedImages.value!)
-                                          : userData?.photoURL == null
-                                              ? null
-                                              : NetworkImage(
-                                                  userData?.photoURL ?? "",
-                                                )) as ImageProvider<Object>?,
-                                      child: webAuth.selectedImages.value !=
-                                              null
-                                          ? null
-                                          : userData?.photoURL == null
-                                              ? Image(
-                                                  image: AssetImage(
-                                                    assetImage("profile_dummy"),
-                                                  ),
-                                                )
-                                              : null,
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      webAuth.pickImages();
-                                    },
-                                    child: Container(
-                                      width: 30,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(50),
-                                        color: Colors.white,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey.withOpacity(0.1),
-                                            spreadRadius: 1,
-                                            blurRadius: 20,
-                                            offset: Offset(0, 0),
+                          child: StreamBuilder(
+                            stream: FirebaseFirestore.instance
+                                .collection("users")
+                                .doc(userData.uid)
+                                .snapshots(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<
+                                        DocumentSnapshot<Map<String, dynamic>>>
+                                    snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Container();
+                              } else if (snapshot.hasData) {
+                                print(snapshot.data?.data());
+                                var data = snapshot.data?.data();
+                                return Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Stack(
+                                      alignment: Alignment.bottomRight,
+                                      children: [
+                                        Obx(
+                                          () => ClipOval(
+                                            child: Container(
+                                              width: 90,
+                                              height: 90,
+                                              color: brown1,
+                                              child: (webAuth.selectedImages
+                                                          .value !=
+                                                      null
+                                                  ? Image.memory(webAuth
+                                                      .selectedImages.value!)
+                                                  : data?["logo"] == null
+                                                      ? Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(10.0),
+                                                          child: Image(
+                                                            image: AssetImage(
+                                                              assetImage(
+                                                                  "profile_dummy"),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      : NetImage(
+                                                          data?["logo"] ?? "",
+                                                        )),
+                                            ),
                                           ),
-                                        ],
-                                      ),
-                                      child: Icon(Icons.edit, size: 15),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            webAuth.pickImages();
+                                          },
+                                          child: Container(
+                                            width: 30,
+                                            height: 30,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              color: darkBlue,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey
+                                                      .withOpacity(0.1),
+                                                  spreadRadius: 1,
+                                                  blurRadius: 20,
+                                                  offset: Offset(0, 0),
+                                                ),
+                                              ],
+                                            ),
+                                            child: Icon(
+                                              Icons.edit,
+                                              size: 15,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
-                              ),
-                              vSpace(20),
-                              getCustomFont(
-                                "University Name",
-                                18,
-                                fontWeight: bold,
-                              ),
-                              vSpace(5),
-                              getCustomFont(
-                                "ROLE",
-                                15,
-                                fontWeight: semiBold,
-                                fontColor: colorGrey3,
-                              )
-                            ],
+                                    vSpace(20),
+                                    getCustomFont(
+                                      data?["institute_name"] ?? "Super Admin",
+                                      18,
+                                      fontWeight: bold,
+                                      maxLine: 3,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    vSpace(5),
+                                    getCustomFont(
+                                      data?["institute_access"] ?? "Manage",
+                                      15,
+                                      fontWeight: semiBold,
+                                      fontColor: colorGrey3,
+                                    )
+                                  ],
+                                );
+                              } else {
+                                return getErrorMessage(snapshot.error);
+                              }
+                            },
                           ),
                         ),
                         Expanded(

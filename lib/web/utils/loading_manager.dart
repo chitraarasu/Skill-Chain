@@ -86,11 +86,11 @@ getErrorMessage(msg) {
   return Center(
     child: getCustomFont(
       msg == null || msg == "null" || msg.toString().contains("subtype")
-          ? "Your offers are waiting ! Steal the deals after some time."
+          ? "Something went wrong! please try again later."
           : msg.toString().contains("SocketException")
               ? "Please check your internet connection!"
               : msg.toString().contains("Exception")
-                  ? "Your offers are waiting ! Steal the deals after some time."
+                  ? "Something went wrong! please try again later."
                   : msg.toString(),
       16,
       fontColor: Colors.black,

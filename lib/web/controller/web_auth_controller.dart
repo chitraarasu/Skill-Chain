@@ -51,7 +51,7 @@ class WebAuthController extends GetxController {
       } else {
         selectedImages.value = result.files.first.bytes;
         selectedImages.refresh();
-        // updateProfile();
+        updateProfile();
       }
     } else {}
   }
@@ -68,12 +68,12 @@ class WebAuthController extends GetxController {
       await uploadTask.whenComplete(() async {
         String imageUrl = await storageReference.getDownloadURL();
         print('Image URL: $imageUrl');
-        await user?.updatePhotoURL(imageUrl);
-        await user?.reload();
+        // await user?.updatePhotoURL(imageUrl);
+        // await user?.reload();
         FirebaseFirestore.instance.collection("users").doc(user?.uid).update({
-          "photo_url": imageUrl,
+          "logo": imageUrl,
         });
-        loggedInUser.value = FirebaseAuth.instance.currentUser;
+        // loggedInUser.value = FirebaseAuth.instance.currentUser;
       });
     } catch (e) {
       webToast("Something went wrong!");
@@ -246,6 +246,29 @@ class WebAuthController extends GetxController {
       } finally {
         LoadingManager.shared.hideLoading();
       }
+    }
+  }
+
+  deleteIndustry(InstituteModel data) async {
+    LoadingManager.shared.showLoading();
+    try {
+      if (data.logo?.isNotEmpty ?? false) {
+        Reference storageReference = FirebaseStorage.instance
+            .ref()
+            .child('user_profile/${data.uid}.png');
+
+        await storageReference.delete();
+      }
+
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(data.uid)
+          .delete();
+    } catch (e) {
+      print(e);
+    } finally {
+      Get.back();
+      LoadingManager.shared.hideLoading();
     }
   }
 
