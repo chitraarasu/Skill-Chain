@@ -47,7 +47,7 @@ class CustomTextField extends StatelessWidget {
     );
 
     return SizedBox(
-      height: height,
+      height: (height ?? 0) * (maxLine ?? 1),
       child: TextFormField(
         textAlign: textAlign,
         minLines: maxLine ?? 1,
@@ -64,6 +64,7 @@ class CustomTextField extends StatelessWidget {
           }
         },
         cursorHeight: 15,
+        onTapOutside: (_) => FocusScope.of(context).unfocus(),
         cursorColor: brown,
         decoration: InputDecoration(
           hintText: hint,

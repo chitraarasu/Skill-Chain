@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:skill_chain/web/utils/resizer/fetch_pixels.dart';
 
 import '../../web/utils/ui_element.dart';
 import '../../web/utils/widgets/widgets.dart';
+import 'login.dart';
 
 class OnBoardingPage extends StatelessWidget {
   OnBoardingPage({Key? key}) : super(key: key);
@@ -79,11 +81,11 @@ class OnBoardingPage extends StatelessWidget {
   }
 
   void goToPhoneNumberScreen(context) {
-    box.write("isSkipped", true);
-    // Get.offAll(
-    //   () => Dashboard(),
-    //   transition: Transition.fadeIn,
-    // );
+    // box.write("isSkipped", true);
+    Get.offAll(
+      () => Login(),
+      transition: Transition.fadeIn,
+    );
   }
 
   Widget buildImage(String path) {
