@@ -9,7 +9,6 @@ class CustomTextField extends StatelessWidget {
   final bool hide;
   final Function(String)? onChange;
   final double? width;
-  
   final TextAlign textAlign;
   final bool isNeedTick;
   final isNeedborder;
