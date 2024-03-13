@@ -25,6 +25,7 @@ class Login extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                vSpace(15),
                 getCustomFont(
                   "Sign In",
                   20,

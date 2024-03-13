@@ -22,6 +22,7 @@ class SignUp extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                vSpace(15),
                 GestureDetector(
                   onTap: () {
                     Get.back();

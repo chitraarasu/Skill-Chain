@@ -10,6 +10,8 @@ class SecondaryButton extends StatelessWidget {
   final Color? color;
   final double? radius;
   final Function()? onTap;
+  final bool isNeedBorder;
+  final Color backgroundColor;
 
   const SecondaryButton({
     super.key,
@@ -19,16 +21,21 @@ class SecondaryButton extends StatelessWidget {
     this.color,
     this.radius,
     this.onTap,
+    this.isNeedBorder = true,
+    this.backgroundColor = Colors.transparent,
   });
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
-        side: BorderSide(
-          color: color ?? Colors.white,
-          width: isFromProfile ? 1 : 2.0,
-        ),
+        backgroundColor: backgroundColor,
+        side: isNeedBorder
+            ? BorderSide(
+                color: color ?? Colors.white,
+                width: isFromProfile ? 1 : 2.0,
+              )
+            : null,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius ?? 12.0),
         ),

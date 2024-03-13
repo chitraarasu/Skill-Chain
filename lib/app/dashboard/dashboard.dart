@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:skill_chain/app/dashboard/screens/app_home.dart';
+import 'package:skill_chain/app/dashboard/screens/app_home/app_home.dart';
 import 'package:skill_chain/web/utils/color_manager.dart';
 import 'package:skill_chain/web/utils/ui_element.dart';
 import 'package:skill_chain/web/utils/widgets/widgets.dart';
