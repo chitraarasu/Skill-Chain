@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:skill_chain/app/dashboard/dashboard.dart';
 import 'package:skill_chain/app/onboarding/sign_up.dart';
 import 'package:skill_chain/web/utils/buttons/primary_button.dart';
 import 'package:skill_chain/web/utils/font_manager.dart';
@@ -68,11 +70,15 @@ class Login extends StatelessWidget {
                     Expanded(
                       child: PrimaryButton(
                         "Login",
-                        onTap: () {},
+                        onTap: () {
+                          GetStorage box = GetStorage();
+                          box.write("isSkipped", true);
+                          Get.to(() => Dashboard());
+                        },
                         buttonColor: darkBlue,
                         radius: 10,
                         textColor: Colors.white,
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           vertical: 15,
                           horizontal: 5,
                         ),

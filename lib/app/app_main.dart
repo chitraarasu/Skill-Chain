@@ -6,6 +6,7 @@ import 'package:skill_chain/app/onboarding/onboarding_screen.dart';
 
 import '../web/utils/color_manager.dart';
 import '../web/utils/font_manager.dart';
+import 'app_controller/app_binder.dart';
 
 class AppMain extends StatelessWidget {
   const AppMain({super.key});
@@ -28,7 +29,7 @@ class AppMain extends StatelessWidget {
         ),
       ),
       home: (box.read("isSkipped") ?? false) ? Dashboard() : OnBoardingPage(),
-      // initialBinding: WebBinder(),
+      initialBinding: AppBinder(),
     );
   }
 }
