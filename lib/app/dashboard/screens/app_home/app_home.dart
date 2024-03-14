@@ -19,7 +19,7 @@ class AppHome extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            vSpace(15),
+            vSpace(20),
             getCustomFont("Dashboard", 20, fontWeight: bold),
             vSpace(12.5),
             Expanded(
@@ -30,7 +30,7 @@ class AppHome extends StatelessWidget {
                     vSpace(12.5),
                     Container(
                       decoration: BoxDecoration(
-                        color: darkBlue,
+                        color: lightBlue,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Padding(
@@ -55,21 +55,21 @@ class AppHome extends StatelessWidget {
                                         "Markus D",
                                         18,
                                         fontWeight: semiBold,
-                                        fontColor: colorWhite,
+                                        fontColor: Colors.black,
                                       ),
                                       vSpace(5),
                                       getCustomFont(
                                         "BCA Degree",
                                         14,
                                         fontWeight: medium,
-                                        fontColor: colorWhite,
+                                        fontColor: Colors.black,
                                       ),
                                       vSpace(5),
                                       getCustomFont(
                                         "2 Skills",
                                         14,
                                         fontWeight: medium,
-                                        fontColor: colorGrey2,
+                                        fontColor: Colors.black,
                                       ),
                                     ],
                                   ),
@@ -80,7 +80,7 @@ class AppHome extends StatelessWidget {
                             Divider(
                               height: 0,
                               thickness: 0.5,
-                              color: colorWhite,
+                              color: Colors.black,
                             ),
                             vSpace(20),
                             SizedBox(
@@ -90,7 +90,7 @@ class AppHome extends StatelessWidget {
                                 title: "Add Skill",
                                 isNeedBorder: false,
                                 radius: 10,
-                                backgroundColor: Color(0xFF3F444E),
+                                backgroundColor: darkBlue.withOpacity(0.75),
                               ),
                             )
                           ],
@@ -98,7 +98,36 @@ class AppHome extends StatelessWidget {
                       ),
                     ),
                     vSpace(25),
-                    getCustomFont("Skills", 20, fontWeight: bold),
+                    getCustomFont("Public Id", 18, fontWeight: bold),
+                    vSpace(15),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: brown,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 4.0,
+                          horizontal: 20,
+                        ),
+                        child: Row(
+                          children: [
+                            getCustomFont(
+                              "1234567890",
+                              15,
+                              fontWeight: semiBold,
+                            ),
+                            Spacer(),
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(Icons.copy),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    vSpace(25),
+                    getCustomFont("Skills", 18, fontWeight: bold),
                     vSpace(15),
                     ...List.generate(
                       5,
@@ -106,54 +135,85 @@ class AppHome extends StatelessWidget {
                         onTap: () {
                           Get.to(() => const OpenCertificate());
                         },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(width: 0.75, color: colorGrey1),
-                          ),
-                          margin: EdgeInsets.only(bottom: 15),
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Row(
-                              children: [
-                                CircleAvatar(
-                                  radius: 30,
-                                  backgroundImage: NetworkImage(
-                                    "https://upload.wikimedia.org/wikipedia/commons/b/b9/Tamil_Nadu_Emblem.png",
-                                  ),
-                                ),
-                                hSpace(20),
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      getCustomFont(
-                                        "Tamil nadu state government.",
-                                        14,
-                                        fontWeight: semiBold,
-                                        maxLine: 2,
-                                      ),
-                                      vSpace(5),
-                                      getCustomFont(
-                                        "Skills",
-                                        13,
-                                        fontWeight: medium,
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
+                        child: SkillCard(false),
                       ),
                     ).toList(),
                   ],
                 ),
               ),
             )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SkillCard extends StatelessWidget {
+  final bool isNeedStatus;
+
+  SkillCard(this.isNeedStatus);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(width: 0.75, color: colorGrey1),
+      ),
+      margin: EdgeInsets.only(bottom: 15),
+      child: Padding(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  radius: 30,
+                  backgroundImage: NetworkImage(
+                    "https://upload.wikimedia.org/wikipedia/commons/b/b9/Tamil_Nadu_Emblem.png",
+                  ),
+                ),
+                hSpace(20),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      getCustomFont(
+                        "Tamil nadu state government.",
+                        14,
+                        fontWeight: semiBold,
+                        maxLine: 2,
+                      ),
+                      vSpace(5),
+                      getCustomFont(
+                        "Skills",
+                        13,
+                        fontWeight: medium,
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+            if (isNeedStatus)
+              Row(
+                children: [
+                  Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: getCustomFont(
+                      "Pending",
+                      13,
+                      fontWeight: medium,
+                      fontColor: orange,
+                    ),
+                  ),
+                ],
+              ),
           ],
         ),
       ),

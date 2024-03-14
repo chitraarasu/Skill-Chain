@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:skill_chain/app/dashboard/screens/AppProfile/app_profile.dart';
 import 'package:skill_chain/app/dashboard/screens/app_home/app_home.dart';
+import 'package:skill_chain/app/dashboard/screens/verification/verification.dart';
 import 'package:skill_chain/web/utils/color_manager.dart';
 import 'package:skill_chain/web/utils/ui_element.dart';
 import 'package:skill_chain/web/utils/widgets/widgets.dart';
@@ -35,9 +37,9 @@ class Dashboard extends StatelessWidget {
         () => routeController.currentPos.value == 0
             ? AppHome()
             : routeController.currentPos.value == 1
-                ? Container()
+                ? AppVerification()
                 : routeController.currentPos.value == 2
-                    ? Container()
+                    ? AppProfile()
                     : Container(),
       ),
       bottomNavigationBar: buildBottomBar(

@@ -16,5 +16,5 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   Get.put(WebAuthController());
-  runApp(!kIsWeb ? const AppMain() : WebApp());
+  runApp(!kIsWeb ? AppMain() : WebApp());
 }

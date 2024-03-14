@@ -31,7 +31,7 @@ class SignUp extends StatelessWidget {
                 ),
                 vSpace(15),
                 getCustomFont(
-                  "Sign In",
+                  "Sign Up",
                   20,
                   fontWeight: bold,
                   fontColor: Colors.black,
