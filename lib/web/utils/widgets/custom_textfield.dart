@@ -47,7 +47,7 @@ class CustomTextField extends StatelessWidget {
     );
 
     return SizedBox(
-      height: (height ?? 0) * (maxLine ?? 1),
+      height: height == null ? null : (height ?? 0) * (maxLine ?? 1),
       child: TextFormField(
         textAlign: textAlign,
         minLines: maxLine ?? 1,

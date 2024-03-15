@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skill_chain/web/screens/dashboard/pages/users.dart';
 import 'package:skill_chain/web/utils/buttons/primary_button.dart';
+import 'package:skill_chain/web/utils/loading_manager.dart';
 import 'package:skill_chain/web/utils/ui_element.dart';
 import 'package:skill_chain/web/utils/widgets/custom_textfield.dart';
 
+import '../../../models/skills_model.dart';
 import '../../../utils/color_manager.dart';
 import '../../../utils/font_manager.dart';
 import '../../../utils/widgets/custom_profile.dart';
@@ -74,30 +77,120 @@ class Verification extends StatelessWidget {
                       ],
                     ),
                     Expanded(
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  GetSkill(isFromHome, "School"),
-                                  vSpace(10),
-                                  GetSkill(isFromHome, "College"),
-                                ],
-                              ),
-                            ),
-                          ),
-                          hSpace(15),
-                          Expanded(
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  GetSkill(isFromHome, "Skills"),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
+                      child: FutureBuilder(
+                        future: FirebaseFirestore.instance
+                            .collection("skills")
+                            .orderBy(
+                              'created_time',
+                            )
+                            .get(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                                snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return kLoading;
+                          } else if (snapshot.hasData) {
+                            print(snapshot.data?.docs.first.data());
+                            List<SkillsModel> data = skillsModelFromJson(
+                              snapshot.data?.docs
+                                      .map((e) => e.data())
+                                      .toList() ??
+                                  [],
+                            );
+                            print(data.length);
+                            return isForAddSkill
+                                ? Builder(builder: (context) {
+                                    return SizedBox(
+                                      height: double.infinity,
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          children: [
+                                            GetSkill(
+                                              isFromHome,
+                                              "Skills",
+                                              data
+                                                          .where(
+                                                              (e) =>
+                                                                  e.category ==
+                                                                  "ec")
+                                                          .toList()
+                                                      as List<SkillsModel>? ??
+                                                  [],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  })
+                                : Row(
+                                    children: [
+                                      Expanded(
+                                        child: SizedBox(
+                                          height: double.infinity,
+                                          child: SingleChildScrollView(
+                                            child: Column(
+                                              children: [
+                                                GetSkill(
+                                                  isFromHome,
+                                                  "School",
+                                                  data
+                                                              .where((e) =>
+                                                                  e.category ==
+                                                                  "school")
+                                                              .toList()
+                                                          as List<
+                                                              SkillsModel>? ??
+                                                      [],
+                                                ),
+                                                vSpace(10),
+                                                GetSkill(
+                                                  isFromHome,
+                                                  "College",
+                                                  data
+                                                              .where((e) =>
+                                                                  e.category ==
+                                                                  "college")
+                                                              .toList()
+                                                          as List<
+                                                              SkillsModel>? ??
+                                                      [],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      hSpace(15),
+                                      Expanded(
+                                        child: SizedBox(
+                                          height: double.infinity,
+                                          child: SingleChildScrollView(
+                                            child: Column(
+                                              children: [
+                                                GetSkill(
+                                                  isFromHome,
+                                                  "Skills",
+                                                  data
+                                                              .where((e) =>
+                                                                  e.category ==
+                                                                  "ec")
+                                                              .toList()
+                                                          as List<
+                                                              SkillsModel>? ??
+                                                      [],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                          } else {
+                            return getErrorMessage(snapshot.error);
+                          }
+                        },
                       ),
                     )
                   ],
@@ -333,8 +426,9 @@ class Verification extends StatelessWidget {
 class GetSkill extends StatelessWidget {
   final bool isFromHome;
   final topic;
+  List<SkillsModel> list;
 
-  GetSkill(this.isFromHome, this.topic);
+  GetSkill(this.isFromHome, this.topic, this.list);
 
   @override
   Widget build(BuildContext context) {
@@ -349,9 +443,8 @@ class GetSkill extends StatelessWidget {
           fontWeight: semiBold,
         ),
         vSpace(15),
-        ...List.generate(
-          10,
-          (index) => Container(
+        ...list.map(
+          (item) => Container(
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(5),
@@ -363,15 +456,14 @@ class GetSkill extends StatelessWidget {
                 children: [
                   Expanded(
                     child: getCustomFont(
-                      "Skill ${index + 1}",
+                      item.name ?? "",
                       isFromHome ? 15 : 17,
                       fontColor: Colors.black,
                       fontWeight: semiBold,
                     ),
                   ),
-                  index == 1
-                      ? Icon(Icons.check_circle_outline_rounded)
-                      : Icon(Icons.radio_button_unchecked_rounded)
+                  Icon(Icons.check_circle_outline_rounded)
+                  // : Icon(Icons.radio_button_unchecked_rounded)
                 ],
               ),
             ),
