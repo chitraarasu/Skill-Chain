@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -96,4 +97,12 @@ void webToast(String texts) {
     webShowClose: true,
     webBgColor: "linear-gradient(to right, #EC5938, #EC5938)",
   );
+}
+
+void toastPlatform(String texts) {
+  if (kIsWeb) {
+    webToast(texts);
+  } else {
+    showToast(texts);
+  }
 }
