@@ -7,6 +7,8 @@ import 'package:skill_chain/web/utils/loading_manager.dart';
 import 'package:skill_chain/web/utils/ui_element.dart';
 import 'package:skill_chain/web/utils/widgets/custom_textfield.dart';
 
+import '../../../controller/web_auth_controller.dart';
+import '../../../controller/web_verification_controller.dart';
 import '../../../models/skills_model.dart';
 import '../../../utils/color_manager.dart';
 import '../../../utils/font_manager.dart';
@@ -24,6 +26,8 @@ class Verification extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WebAuthController webAuth = Get.find();
+
     return Padding(
       padding: isFromHome ? EdgeInsets.zero : EdgeInsets.all(40.0),
       child: Container(
@@ -99,8 +103,33 @@ class Verification extends StatelessWidget {
                                   [],
                             );
                             print(data.length);
-                            return isForAddSkill
+                            return isForAddSkill &&
+                                    webAuth.customLoggedInUser.value != null
                                 ? Builder(builder: (context) {
+                                    String skill = "";
+                                    String skillKey = "";
+                                    print(webAuth.customLoggedInUser.value
+                                        ?.instituteAccess);
+                                    switch (webAuth.customLoggedInUser.value
+                                        ?.instituteAccess) {
+                                      case "10th":
+                                        skill = "School";
+                                        skillKey = "1";
+                                        break;
+                                      case "12th":
+                                        skill = "School";
+                                        skillKey = "2";
+                                        break;
+                                      case "Degree":
+                                        skill = "College";
+                                        skillKey = "3";
+                                        break;
+                                      case "Extra Skills":
+                                        skill = "Extra Skills";
+                                        skillKey = "4";
+                                        break;
+                                    }
+
                                     return SizedBox(
                                       height: double.infinity,
                                       child: SingleChildScrollView(
@@ -108,15 +137,15 @@ class Verification extends StatelessWidget {
                                           children: [
                                             GetSkill(
                                               isFromHome,
-                                              "Skills",
+                                              skill,
                                               data
-                                                          .where(
-                                                              (e) =>
-                                                                  e.category ==
-                                                                  "ec")
+                                                          .where((e) =>
+                                                              e.accessId ==
+                                                              skillKey)
                                                           .toList()
                                                       as List<SkillsModel>? ??
                                                   [],
+                                              forAddSkill: true,
                                             ),
                                           ],
                                         ),
@@ -425,10 +454,13 @@ class Verification extends StatelessWidget {
 
 class GetSkill extends StatelessWidget {
   final bool isFromHome;
-  final topic;
+  final String topic;
   List<SkillsModel> list;
+  final bool forAddSkill;
 
-  GetSkill(this.isFromHome, this.topic, this.list);
+  GetSkill(this.isFromHome, this.topic, this.list, {this.forAddSkill = false});
+
+  WebVerificationController webVerifyController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -444,27 +476,44 @@ class GetSkill extends StatelessWidget {
         ),
         vSpace(15),
         ...list.map(
-          (item) => Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(5),
-            ),
-            margin: EdgeInsets.only(bottom: 10),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: getCustomFont(
-                      item.name ?? "",
-                      isFromHome ? 15 : 17,
-                      fontColor: Colors.black,
-                      fontWeight: semiBold,
-                    ),
+          (item) => GestureDetector(
+            onTap: () {
+              if (forAddSkill) {
+                webVerifyController.verifySkills.value = [];
+                webVerifyController.verifySkills.add(item);
+              } else {
+                if (webVerifyController.verifySkills.contains(item)) {
+                  webVerifyController.verifySkills.remove(item);
+                } else {
+                  webVerifyController.verifySkills.add(item);
+                }
+              }
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              margin: EdgeInsets.only(bottom: 10),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Obx(
+                  () => Row(
+                    children: [
+                      Expanded(
+                        child: getCustomFont(
+                          item.name ?? "",
+                          isFromHome ? 15 : 17,
+                          fontColor: Colors.black,
+                          fontWeight: semiBold,
+                        ),
+                      ),
+                      webVerifyController.verifySkills.contains(item)
+                          ? Icon(Icons.check_circle_outline_rounded)
+                          : Icon(Icons.radio_button_unchecked_rounded)
+                    ],
                   ),
-                  Icon(Icons.check_circle_outline_rounded)
-                  // : Icon(Icons.radio_button_unchecked_rounded)
-                ],
+                ),
               ),
             ),
           ),

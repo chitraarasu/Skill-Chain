@@ -13,7 +13,6 @@ String customUserModelToJson(CustomUserModel data) =>
 class CustomUserModel {
   final String? logo;
   final String? instituteAccess;
-  final String? password;
   final String? instituteEmail;
   final String? instituteAddress;
   final String? instituteId;
@@ -23,7 +22,6 @@ class CustomUserModel {
   CustomUserModel({
     this.logo,
     this.instituteAccess,
-    this.password,
     this.instituteEmail,
     this.instituteAddress,
     this.instituteId,
@@ -35,7 +33,6 @@ class CustomUserModel {
       CustomUserModel(
         logo: json["logo"],
         instituteAccess: json["institute_access"],
-        password: json["password"],
         instituteEmail: json["institute_email"],
         instituteAddress: json["institute_address"],
         instituteId: json["institute_id"],
@@ -46,7 +43,6 @@ class CustomUserModel {
   Map<String, dynamic> toJson() => {
         "logo": logo,
         "institute_access": instituteAccess,
-        "password": password,
         "institute_email": instituteEmail,
         "institute_address": instituteAddress,
         "institute_id": instituteId,
