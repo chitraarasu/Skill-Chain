@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -273,9 +272,7 @@ class Verification extends StatelessWidget {
                         : EdgeInsets.all(30.0),
                     child: Obx(
                       () => webVerify.selectedUsers.isEmpty
-                          ? kDebugMode
-                              ? Container()
-                              : Lottie.asset(lottieAsset("empty_user"))
+                          ? Lottie.asset(lottieAsset("empty_user"))
                           : Column(
                               children: [
                                 Expanded(
@@ -472,7 +469,15 @@ class Verification extends StatelessWidget {
                                                   "Please select certificates of selected user's");
                                             }
                                           } else {
-                                            popUp(context, isForAddSkill);
+                                            List<String> selectedSkillIds =
+                                                webVerify.selectedSkills
+                                                    .map((element) =>
+                                                        element.skillId ?? "")
+                                                    .toList();
+                                            popUp(context, isForAddSkill,
+                                                apiStatus: checkSelectedSkills(
+                                                    webVerify.selectedUsers,
+                                                    selectedSkillIds));
                                           }
                                         },
                                       ),
@@ -490,6 +495,24 @@ class Verification extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  List<bool> checkSelectedSkills(
+      List<BcUser> users, List<String> selectedSkillIds) {
+    List<bool> result = [];
+
+    for (BcUser user in users) {
+      bool hasAllSkills = true;
+      for (String skillId in selectedSkillIds) {
+        if (!(user.skills ?? []).any((skill) => skill.skillId == skillId)) {
+          hasAllSkills = false;
+          break;
+        }
+      }
+      result.add(hasAllSkills);
+    }
+
+    return result;
   }
 
   popUp(BuildContext context, bool isForAddSkill, {List? apiStatus}) {
@@ -547,6 +570,7 @@ class Verification extends StatelessWidget {
                     isFromVerifySkill: true,
                     data: webVerify.selectedUsers[index],
                     active: apiStatus?[index],
+                    isForAddSkill: !isForAddSkill,
                   ),
                 )
               ],

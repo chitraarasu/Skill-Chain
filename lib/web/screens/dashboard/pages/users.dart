@@ -91,8 +91,13 @@ class UsersTile extends StatelessWidget {
   final bool isFromVerifySkill;
   final BcUser? data;
   final bool? active;
+  final bool? isForAddSkill;
 
-  UsersTile({this.isFromVerifySkill = false, this.data, this.active});
+  UsersTile(
+      {this.isFromVerifySkill = false,
+      this.data,
+      this.active,
+      this.isForAddSkill});
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +183,13 @@ class UsersTile extends StatelessWidget {
                 Expanded(
                   child: Center(
                     child: getCustomFont(
-                      (active ?? false) ? "Skill Added" : "Skill Already Exist",
+                      (active ?? false)
+                          ? (isForAddSkill ?? false)
+                              ? "Pass"
+                              : "Skill Added"
+                          : (isForAddSkill ?? false)
+                              ? "Fail"
+                              : "Skill Already Exist",
                       13,
                       fontColor: colorGrey1,
                       fontWeight: medium,
