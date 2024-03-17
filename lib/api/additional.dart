@@ -6,8 +6,8 @@ extension AdditionalExtension on APIRequest {
       case EAPIRequest.getUserFromPublicIds:
       case EAPIRequest.addSkill:
         return 'POST';
-      // case EAPIRequest.getProfile:
-      //   return 'GET';
+      case EAPIRequest.allUsers:
+        return 'GET';
     }
   }
 

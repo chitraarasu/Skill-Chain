@@ -19,8 +19,8 @@ class CustomProfile extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(
-            width: 55,
-            height: 55,
+            width: width ?? 55,
+            height: width ?? 55,
             child: ClipOval(
               child: image == null
                   ? Container(

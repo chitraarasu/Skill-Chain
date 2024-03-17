@@ -56,4 +56,24 @@ class WebVerificationController extends GetxController {
     List<bool> resStatus = List<bool>.from(res.data["data"]);
     return resStatus;
   }
+
+  Future<List<BcUser>> fetchUsers() async {
+    var res = await APIManager.shared.response(
+      APIRequest(EAPIRequest.allUsers),
+      isNeedLoading: false,
+      isNeedErrorAlert: false,
+    );
+
+    if (res is Error) return [];
+    List data = res.data;
+    try {
+      List<BcUser> usersList =
+          data.map((e) => BcUser.fromJson(e["Record"])).toList();
+      return usersList;
+    } catch (e) {
+      print(e);
+      webToast(e.toString());
+      return [];
+    }
+  }
 }

@@ -14,6 +14,8 @@ extension URLExtension on APIRequest {
         return "/user_from_public_id";
       case EAPIRequest.addSkill:
         return "/add_skill";
+      case EAPIRequest.allUsers:
+        return "";
     }
   }
 }

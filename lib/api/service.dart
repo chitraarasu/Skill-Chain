@@ -5,6 +5,7 @@ import 'package:skill_chain/api/url.dart';
 enum EAPIRequest {
   getUserFromPublicIds,
   addSkill,
+  allUsers,
 }
 
 abstract class AAPIRequest {
