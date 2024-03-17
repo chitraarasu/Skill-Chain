@@ -8,9 +8,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:skill_chain/web/models/custom_user_model.dart';
+import 'package:skill_chain/web/models/institute_user_model.dart';
 
-import '../models/institute_model.dart';
 import '../utils/loading_manager.dart';
 import '../utils/ui_element.dart';
 import '../utils/web_support.dart';
@@ -20,7 +19,7 @@ class WebAuthController extends GetxController {
   Rxn<Uint8List> selectedImages = Rxn<Uint8List>();
   Rxn<Uint8List> selectedInstituteLogo = Rxn<Uint8List>();
   Rxn<User> loggedInUser = Rxn();
-  Rxn<CustomUserModel> customLoggedInUser = Rxn();
+  Rxn<InstituteUserModel> customLoggedInUser = Rxn();
   Rxn<String> selectedAccess = Rxn();
 
   TextEditingController email = TextEditingController();
@@ -45,7 +44,7 @@ class WebAuthController extends GetxController {
             .doc(loggedInUser.value?.uid)
             .get();
         if (data.data() != null) {
-          customLoggedInUser.value = CustomUserModel.fromJson(data.data()!);
+          customLoggedInUser.value = InstituteUserModel.fromJson(data.data()!);
         } else {
           customLoggedInUser.value = null;
         }
@@ -161,7 +160,7 @@ class WebAuthController extends GetxController {
     }
   }
 
-  addInstitute({InstituteModel? data}) async {
+  addInstitute({InstituteUserModel? data}) async {
     if (validate(isSignUp: true)) {
       LoadingManager.shared.showLoading();
       try {
@@ -264,7 +263,7 @@ class WebAuthController extends GetxController {
     }
   }
 
-  deleteIndustry(InstituteModel data) async {
+  deleteIndustry(InstituteUserModel data) async {
     LoadingManager.shared.showLoading();
     try {
       if (data.logo?.isNotEmpty ?? false) {

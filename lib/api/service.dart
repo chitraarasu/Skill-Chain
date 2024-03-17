@@ -3,7 +3,8 @@ import 'package:skill_chain/api/additional.dart';
 import 'package:skill_chain/api/url.dart';
 
 enum EAPIRequest {
-  login,
+  getUserFromPublicIds,
+  addSkill,
 }
 
 abstract class AAPIRequest {

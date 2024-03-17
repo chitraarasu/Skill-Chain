@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:skill_chain/web/screens/dashboard/pages/users.dart';
 import 'package:skill_chain/web/utils/buttons/primary_button.dart';
 import 'package:skill_chain/web/utils/loading_manager.dart';
@@ -9,6 +13,7 @@ import 'package:skill_chain/web/utils/widgets/custom_textfield.dart';
 
 import '../../../controller/web_auth_controller.dart';
 import '../../../controller/web_verification_controller.dart';
+import '../../../models/bc_user_model.dart';
 import '../../../models/skills_model.dart';
 import '../../../utils/color_manager.dart';
 import '../../../utils/font_manager.dart';
@@ -24,9 +29,18 @@ class Verification extends StatelessWidget {
     this.isForAddSkill = false,
   });
 
+  TextEditingController uIds = TextEditingController();
+
+  bool validateUniqueNumbers(String numbersString) {
+    List<String> numbers = numbersString.split(", ");
+    Set<String> uniqueNumbers = Set.from(numbers);
+    return numbers.length == uniqueNumbers.length;
+  }
+
   @override
   Widget build(BuildContext context) {
     WebAuthController webAuth = Get.find();
+    WebVerificationController webVerify = Get.find();
 
     return Padding(
       padding: isFromHome ? EdgeInsets.zero : EdgeInsets.all(40.0),
@@ -57,6 +71,7 @@ class Verification extends StatelessWidget {
                                   const EdgeInsets.symmetric(horizontal: 8.0),
                               child: CustomTextField(
                                 // borderRadius: 20,
+                                controller: uIds,
                                 isNeedborder: false,
                                 hint:
                                     "Enter comma separated public id. Like id1, id2....",
@@ -66,16 +81,34 @@ class Verification extends StatelessWidget {
                           ),
                         ),
                         hSpace(10),
-                        Container(
-                          height: 47.5,
-                          width: 47.5,
-                          decoration: BoxDecoration(
-                            color: orange,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.white,
+                        GestureDetector(
+                          onTap: () {
+                            if (uIds.text.isEmpty) {
+                              webToast("Enter valid public id's");
+                            } else {
+                              bool isValid = validateUniqueNumbers(uIds.text);
+                              if (isValid) {
+                                webVerify.getUserFromPublicId(
+                                    uIds.text.split(", "), () {
+                                  uIds.clear();
+                                });
+                              } else {
+                                webToast(
+                                    "Same public id entered multiple times!");
+                              }
+                            }
+                          },
+                          child: Container(
+                            height: 47.5,
+                            width: 47.5,
+                            decoration: BoxDecoration(
+                              color: orange,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Icon(
+                              Icons.add,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ],
@@ -238,214 +271,287 @@ class Verification extends StatelessWidget {
                     padding: isFromHome
                         ? EdgeInsets.all(15.0)
                         : EdgeInsets.all(30.0),
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: 10,
-                            itemBuilder: (BuildContext context, int index) =>
-                                Container(
-                              decoration: BoxDecoration(
-                                color: colorWhite.withOpacity(.8),
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              margin: const EdgeInsets.only(bottom: 10),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    CustomProfile(
-                                      radius: isFromHome ? 20 : 25,
-                                      width: null,
-                                    ),
-                                    hSpace(10),
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          getCustomFont(
-                                            "User Name",
-                                            isFromHome ? 15 : 17,
-                                            fontColor: Colors.black,
-                                            fontWeight: semiBold,
+                    child: Obx(
+                      () => webVerify.selectedUsers.isEmpty
+                          ? kDebugMode
+                              ? Container()
+                              : Lottie.asset(lottieAsset("empty_user"))
+                          : Column(
+                              children: [
+                                Expanded(
+                                  child: ListView.builder(
+                                      itemCount: webVerify.selectedUsers.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        BcUser data =
+                                            webVerify.selectedUsers[index];
+                                        return Container(
+                                          decoration: BoxDecoration(
+                                            color: colorWhite.withOpacity(.8),
+                                            borderRadius:
+                                                BorderRadius.circular(25),
                                           ),
-                                          getCustomFont(
-                                            "PublicId",
-                                            isFromHome ? 14 : 15,
-                                            fontColor: colorGrey1,
-                                            fontWeight: semiBold,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: CircleAvatar(
-                                        radius: 12,
-                                        backgroundColor: brown,
-                                        child: Icon(
-                                          Icons.close,
-                                          size: 18,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: PrimaryButton(
-                                isForAddSkill ? "Add Skill" : "Verify",
-                                buttonColor: darkBlue,
-                                radius: 10,
-                                onTap: () {
-                                  if (isForAddSkill) {
-                                    showDialog(
-                                      context: context,
-                                      builder: (_) => AlertDialog(
-                                        insetPadding: EdgeInsets.zero,
-                                        contentPadding: EdgeInsets.zero,
-                                        content: SingleChildScrollView(
-                                          child: Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                .4,
-                                            padding: EdgeInsets.all(20),
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                            ),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
+                                          margin:
+                                              const EdgeInsets.only(bottom: 10),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
                                               children: [
-                                                Row(
-                                                  children: [
-                                                    Spacer(),
-                                                    IconButton(
-                                                      onPressed: () {
-                                                        Get.back();
-                                                      },
-                                                      icon: CircleAvatar(
-                                                        radius: 12,
-                                                        backgroundColor: brown,
-                                                        child: Icon(
-                                                          Icons.close,
-                                                          size: 18,
-                                                        ),
-                                                      ),
-                                                    )
-                                                  ],
+                                                CustomProfile(
+                                                  radius: isFromHome ? 20 : 25,
+                                                  width: null,
+                                                  image: data.imageUrl,
                                                 ),
-                                                SizedBox(
-                                                  width: 300,
-                                                  height: 300,
-                                                  child: Image(
-                                                    image: AssetImage(
-                                                      assetImage(
-                                                          "skills_added"),
-                                                    ),
-                                                    width: 300,
+                                                hSpace(10),
+                                                Expanded(
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      getCustomFont(
+                                                        data.name ?? "",
+                                                        isFromHome ? 15 : 17,
+                                                        fontColor: Colors.black,
+                                                        fontWeight: semiBold,
+                                                      ),
+                                                      getCustomFont(
+                                                        data.publicId
+                                                                ?.toString() ??
+                                                            "",
+                                                        isFromHome ? 14 : 15,
+                                                        fontColor: colorGrey1,
+                                                        fontWeight: semiBold,
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
-                                                vSpace(15),
-                                                getCustomFont(
-                                                  "Skills Added Successfully!",
-                                                  24,
-                                                  fontWeight: bold,
-                                                  fontColor: darkBlue,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  } else {
-                                    showDialog(
-                                      context: context,
-                                      builder: (_) => AlertDialog(
-                                        insetPadding: EdgeInsets.zero,
-                                        contentPadding: EdgeInsets.zero,
-                                        content: SingleChildScrollView(
-                                          child: Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                .6,
-                                            padding: EdgeInsets.all(20),
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                            ),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Expanded(
-                                                      child: getCustomFont(
-                                                        "Verification Details",
-                                                        24,
-                                                        fontWeight: bold,
-                                                        fontColor: Colors.black,
-                                                      ),
-                                                    ),
-                                                    IconButton(
-                                                      onPressed: () {
-                                                        Get.back();
+                                                if (isForAddSkill)
+                                                  Obx(
+                                                    () => IconButton(
+                                                      onPressed: () async {
+                                                        FilePickerResult?
+                                                            result =
+                                                            await FilePicker
+                                                                .platform
+                                                                .pickFiles(
+                                                          type: FileType.custom,
+                                                          allowedExtensions: [
+                                                            "pdf"
+                                                          ],
+                                                        );
+                                                        if (result != null) {
+                                                          data.setDocFile(result
+                                                              .files
+                                                              .single
+                                                              .bytes!);
+                                                        }
                                                       },
                                                       icon: CircleAvatar(
                                                         radius: 12,
-                                                        backgroundColor: brown,
+                                                        backgroundColor: data
+                                                                    .selectedDoc
+                                                                    .value ==
+                                                                null
+                                                            ? orange
+                                                            : brown,
                                                         child: Icon(
-                                                          Icons.close,
+                                                          data.selectedDoc
+                                                                      .value ==
+                                                                  null
+                                                              ? Icons.add_box
+                                                              : Icons
+                                                                  .file_copy_rounded,
                                                           size: 18,
+                                                          color: data.selectedDoc
+                                                                      .value ==
+                                                                  null
+                                                              ? Colors.white
+                                                              : null,
                                                         ),
                                                       ),
-                                                    )
-                                                  ],
-                                                ),
-                                                vSpace(15),
-                                                ...List.generate(
-                                                  4,
-                                                  (index) => UsersTile(
-                                                      isFromVerifySkill: true),
+                                                    ),
+                                                  ),
+                                                IconButton(
+                                                  onPressed: () {
+                                                    webVerify.selectedUsers
+                                                        .removeAt(index);
+                                                  },
+                                                  icon: CircleAvatar(
+                                                    radius: 12,
+                                                    backgroundColor: brown,
+                                                    child: Icon(
+                                                      Icons.close,
+                                                      size: 18,
+                                                    ),
+                                                  ),
                                                 )
                                               ],
                                             ),
                                           ),
-                                        ),
+                                        );
+                                      }),
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: PrimaryButton(
+                                        isForAddSkill ? "Add Skill" : "Verify",
+                                        buttonColor: darkBlue,
+                                        radius: 10,
+                                        onTap: () async {
+                                          if (webVerify
+                                              .selectedSkills.isEmpty) {
+                                            webToast("Please select skill!");
+                                            return;
+                                          }
+                                          if (isForAddSkill) {
+                                            if (webAuth
+                                                    .customLoggedInUser.value ==
+                                                null) {
+                                              webToast(
+                                                  "Admin can't add skills!");
+                                              return;
+                                            }
+
+                                            String skillId = webVerify
+                                                    .selectedSkills
+                                                    .first
+                                                    .skillId ??
+                                                "";
+                                            String instituteId = webAuth
+                                                    .customLoggedInUser
+                                                    .value
+                                                    ?.uid ??
+                                                "";
+
+                                            List listOfUnSelectedFile =
+                                                webVerify.selectedUsers
+                                                    .where((element) =>
+                                                        element.selectedDoc
+                                                            .value ==
+                                                        null)
+                                                    .toList();
+                                            if (listOfUnSelectedFile.isEmpty) {
+                                              LoadingManager.shared
+                                                  .showLoading();
+                                              webToast("Uploading....");
+
+                                              for (BcUser element
+                                                  in webVerify.selectedUsers) {
+                                                Reference storageReference =
+                                                    FirebaseStorage.instance
+                                                        .ref()
+                                                        .child(
+                                                            'certificates/$instituteId-$skillId-${element.publicId}.pdf');
+
+                                                UploadTask uploadTask =
+                                                    storageReference.putData(
+                                                        element.selectedDoc
+                                                            .value!);
+
+                                                await uploadTask
+                                                    .whenComplete(() async {
+                                                  String docUrl =
+                                                      await storageReference
+                                                          .getDownloadURL();
+                                                  print('Doc url: $docUrl');
+                                                  element.setDocFileUrl(docUrl);
+                                                });
+                                              }
+
+                                              List<bool> res =
+                                                  await webVerify.addSkill(
+                                                      skillId, instituteId);
+                                              popUp(context, isForAddSkill,
+                                                  apiStatus: res);
+                                            } else {
+                                              webToast(
+                                                  "Please select certificates of selected user's");
+                                            }
+                                          } else {
+                                            popUp(context, isForAddSkill);
+                                          }
+                                        },
                                       ),
-                                    );
-                                  }
-                                },
-                              ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ],
                     ),
                   ),
                 ),
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  popUp(BuildContext context, bool isForAddSkill, {List? apiStatus}) {
+    WebVerificationController webVerify = Get.find();
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AlertDialog(
+        insetPadding: EdgeInsets.zero,
+        contentPadding: EdgeInsets.zero,
+        content: SingleChildScrollView(
+          child: Container(
+            width: MediaQuery.of(context).size.width * .6,
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: getCustomFont(
+                        isForAddSkill ? "Skill Added" : "Verification Details",
+                        24,
+                        fontWeight: bold,
+                        fontColor: Colors.black,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        webVerify.selectedUsers.value = [];
+                        webVerify.selectedSkills.value = [];
+                        Get.back();
+                      },
+                      icon: CircleAvatar(
+                        radius: 12,
+                        backgroundColor: brown,
+                        child: Icon(
+                          Icons.close,
+                          size: 18,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                vSpace(15),
+                ...List.generate(
+                  webVerify.selectedUsers.length,
+                  (index) => UsersTile(
+                    isFromVerifySkill: true,
+                    data: webVerify.selectedUsers[index],
+                    active: apiStatus?[index],
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -479,13 +585,13 @@ class GetSkill extends StatelessWidget {
           (item) => GestureDetector(
             onTap: () {
               if (forAddSkill) {
-                webVerifyController.verifySkills.value = [];
-                webVerifyController.verifySkills.add(item);
+                webVerifyController.selectedSkills.value = [];
+                webVerifyController.selectedSkills.add(item);
               } else {
-                if (webVerifyController.verifySkills.contains(item)) {
-                  webVerifyController.verifySkills.remove(item);
+                if (webVerifyController.selectedSkills.contains(item)) {
+                  webVerifyController.selectedSkills.remove(item);
                 } else {
-                  webVerifyController.verifySkills.add(item);
+                  webVerifyController.selectedSkills.add(item);
                 }
               }
             },
@@ -508,7 +614,7 @@ class GetSkill extends StatelessWidget {
                           fontWeight: semiBold,
                         ),
                       ),
-                      webVerifyController.verifySkills.contains(item)
+                      webVerifyController.selectedSkills.contains(item)
                           ? Icon(Icons.check_circle_outline_rounded)
                           : Icon(Icons.radio_button_unchecked_rounded)
                     ],

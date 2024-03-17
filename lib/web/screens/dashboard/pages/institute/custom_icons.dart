@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:skill_chain/web/controller/web_auth_controller.dart';
 import 'package:skill_chain/web/utils/widgets/custom_profile.dart';
 
-import '../../../../models/institute_model.dart';
+import '../../../../models/institute_user_model.dart';
 import '../../../../utils/buttons/primary_button.dart';
 import '../../../../utils/color_manager.dart';
 import '../../../../utils/font_manager.dart';
@@ -11,7 +11,7 @@ import '../../../../utils/ui_element.dart';
 import '../../../../utils/widgets/custom_textfield.dart';
 import '../../../../utils/widgets/widgets.dart';
 
-addInstitute(context, {InstituteModel? data, bool isEdit = false}) {
+addInstitute(context, {InstituteUserModel? data, bool isEdit = false}) {
   List<String> access = [
     "10th",
     "12th",
@@ -298,7 +298,7 @@ addInstitute(context, {InstituteModel? data, bool isEdit = false}) {
 }
 
 class CustomIcons extends StatelessWidget {
-  final InstituteModel data;
+  final InstituteUserModel data;
 
   CustomIcons(this.data);
 

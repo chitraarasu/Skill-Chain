@@ -4,13 +4,13 @@
 
 import 'dart:convert';
 
-CustomUserModel customUserModelFromJson(String str) =>
-    CustomUserModel.fromJson(json.decode(str));
+InstituteUserModel customUserModelFromJson(String str) =>
+    InstituteUserModel.fromJson(json.decode(str));
 
-String customUserModelToJson(CustomUserModel data) =>
+String customUserModelToJson(InstituteUserModel data) =>
     json.encode(data.toJson());
 
-class CustomUserModel {
+class InstituteUserModel {
   final String? logo;
   final String? instituteAccess;
   final String? instituteEmail;
@@ -18,8 +18,9 @@ class CustomUserModel {
   final String? instituteId;
   final String? instituteName;
   final String? uid;
+  final String? password;
 
-  CustomUserModel({
+  InstituteUserModel({
     this.logo,
     this.instituteAccess,
     this.instituteEmail,
@@ -27,10 +28,11 @@ class CustomUserModel {
     this.instituteId,
     this.instituteName,
     this.uid,
+    this.password,
   });
 
-  factory CustomUserModel.fromJson(Map<String, dynamic> json) =>
-      CustomUserModel(
+  factory InstituteUserModel.fromJson(Map<String, dynamic> json) =>
+      InstituteUserModel(
         logo: json["logo"],
         instituteAccess: json["institute_access"],
         instituteEmail: json["institute_email"],
@@ -38,6 +40,7 @@ class CustomUserModel {
         instituteId: json["institute_id"],
         instituteName: json["institute_name"],
         uid: json["uid"],
+        password: json["password"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -48,5 +51,6 @@ class CustomUserModel {
         "institute_id": instituteId,
         "institute_name": instituteName,
         "uid": uid,
+        "password": password,
       };
 }

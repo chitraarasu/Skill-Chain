@@ -15,12 +15,14 @@ class SkillsModel {
   final String? accessId;
   final String? category;
   final String? name;
+  final String? skillId;
 
   SkillsModel({
     // this.createdTime,
     this.accessId,
     this.category,
     this.name,
+    this.skillId,
   });
 
   factory SkillsModel.fromJson(Map<String, dynamic> json) => SkillsModel(
@@ -28,6 +30,7 @@ class SkillsModel {
         accessId: json["access_id"].toString(),
         category: json["category"],
         name: json["name"],
+        skillId: json["skill_id"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -35,5 +38,6 @@ class SkillsModel {
         "access_id": accessId,
         "category": category,
         "name": name,
+        "skill_id": skillId,
       };
 }

@@ -4,14 +4,16 @@ extension URLExtension on APIRequest {
   String getBaseURL() {
     switch (type) {
       default:
-        return 'https://api.pauket.com/api/agent';
+        return 'http://localhost:3000';
     }
   }
 
   String getEndPoint({String additional = ''}) {
     switch (type) {
-      case EAPIRequest.login:
-        return "/login";
+      case EAPIRequest.getUserFromPublicIds:
+        return "/user_from_public_id";
+      case EAPIRequest.addSkill:
+        return "/add_skill";
     }
   }
 }

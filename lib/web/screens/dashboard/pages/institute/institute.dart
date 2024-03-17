@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:skill_chain/web/models/institute_user_model.dart';
 import 'package:skill_chain/web/utils/buttons/primary_button.dart';
 import 'package:skill_chain/web/utils/color_manager.dart';
 import 'package:skill_chain/web/utils/font_manager.dart';
@@ -7,7 +8,6 @@ import 'package:skill_chain/web/utils/loading_manager.dart';
 import 'package:skill_chain/web/utils/ui_element.dart';
 import 'package:skill_chain/web/utils/widgets/widgets.dart';
 
-import '../../../../models/institute_model.dart';
 import '../../../../utils/widgets/custom_profile.dart';
 import '../../../../utils/widgets/custom_textfield.dart';
 import 'custom_icons.dart';
@@ -137,8 +137,8 @@ class Institute extends StatelessWidget {
                   return ListView.builder(
                     itemCount: docs.length,
                     itemBuilder: (BuildContext context, int index) {
-                      InstituteModel model =
-                          InstituteModel.fromJson(docs[index]);
+                      InstituteUserModel model =
+                          InstituteUserModel.fromJson(docs[index]);
 
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),

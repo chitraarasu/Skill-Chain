@@ -44,7 +44,7 @@ class WebDashboard extends StatelessWidget {
       DashboardModel? item = dashboardList
           .firstWhereOrNull((element) => element.route == Screens.institute);
       if (item == null) {
-        dashboardList.insert(3, institute);
+        dashboardList.add(institute);
       }
     }
 

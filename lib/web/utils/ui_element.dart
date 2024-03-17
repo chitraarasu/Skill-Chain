@@ -15,7 +15,7 @@ String svgImage(String name) {
 }
 
 String lottieAsset(String name) {
-  return 'assets/animation/$name.json';
+  return 'assets/lottie/$name.json';
 }
 
 String gifAsset(String name) {

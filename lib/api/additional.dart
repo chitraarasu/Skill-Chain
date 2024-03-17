@@ -3,7 +3,8 @@ import 'service.dart';
 extension AdditionalExtension on APIRequest {
   String getMethod() {
     switch (type) {
-      case EAPIRequest.login:
+      case EAPIRequest.getUserFromPublicIds:
+      case EAPIRequest.addSkill:
         return 'POST';
       // case EAPIRequest.getProfile:
       //   return 'GET';

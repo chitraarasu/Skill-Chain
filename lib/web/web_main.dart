@@ -53,15 +53,15 @@ class WebApp extends StatelessWidget {
         ),
         GetPage(
           name: Screens.institute,
-          page: () => WebDashboard(3),
+          page: () => WebDashboard(5),
         ),
         GetPage(
           name: Screens.skillApproval,
-          page: () => WebDashboard(4),
+          page: () => WebDashboard(3),
         ),
         GetPage(
           name: Screens.users,
-          page: () => WebDashboard(5),
+          page: () => WebDashboard(4),
         ),
         // GetPage(
         //   name: Screens.settings,

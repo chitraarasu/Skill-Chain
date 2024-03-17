@@ -24,9 +24,9 @@ List<DashboardModel> dashboardList = [
   DashboardModel("test", "Verification", Screens.verification, Verification()),
   DashboardModel("add_skill", "Add Skill", Screens.addSkill,
       Verification(isForAddSkill: true)),
-  institute,
   DashboardModel("skill_approve", "Skill Approval", Screens.skillApproval,
       SkillApproval()),
   DashboardModel("user_management", "Users", Screens.users, Users()),
   // DashboardModel("settings", "Settings", Screens.settings),
+  institute,
 ];
