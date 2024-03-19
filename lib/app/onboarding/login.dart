@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:skill_chain/app/dashboard/dashboard.dart';
+import 'package:skill_chain/app/app_controller/app_controller.dart';
 import 'package:skill_chain/app/onboarding/sign_up.dart';
 import 'package:skill_chain/web/utils/buttons/primary_button.dart';
 import 'package:skill_chain/web/utils/font_manager.dart';
@@ -12,7 +11,8 @@ import 'package:skill_chain/web/utils/widgets/widgets.dart';
 import '../../web/utils/color_manager.dart';
 
 class Login extends StatelessWidget {
-  const Login({super.key});
+  TextEditingController publicId = TextEditingController();
+  TextEditingController password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class Login extends StatelessWidget {
                   fontColor: colorGrey1,
                 ),
                 vSpace(10),
-                CustomTextField(height: 44),
+                CustomTextField(height: 44, controller: publicId),
                 vSpace(10),
                 getCustomFont(
                   "Password",
@@ -64,7 +64,7 @@ class Login extends StatelessWidget {
                   fontColor: colorGrey1,
                 ),
                 vSpace(10),
-                CustomTextField(height: 44),
+                CustomTextField(height: 44, controller: password),
                 vSpace(50),
                 Row(
                   children: [
@@ -72,9 +72,19 @@ class Login extends StatelessWidget {
                       child: PrimaryButton(
                         "Login",
                         onTap: () {
-                          GetStorage box = GetStorage();
-                          box.write("isSkipped", true);
-                          Get.to(() => Dashboard());
+                          if (publicId.text.isEmpty) {
+                            toastPlatform("Enter the public id!");
+                            return;
+                          }
+                          if (password.text.length > 6) {
+                            toastPlatform(
+                                "Password should be above 6 characters!");
+                            return;
+                          }
+                          AppRouteController.to.login(
+                            publicId: publicId.text,
+                            password: password.text,
+                          );
                         },
                         buttonColor: darkBlue,
                         radius: 10,

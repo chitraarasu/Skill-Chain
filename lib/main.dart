@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:skill_chain/web/controller/web_auth_controller.dart';
 import 'package:skill_chain/web/web_main.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -17,8 +18,11 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  Get.put(WebAuthController());
+  if (kIsWeb) {
+    Get.put(WebAuthController());
+  }
   HttpOverrides.global = MyHttpOverrides();
+  await GetStorage.init();
   runApp(!kIsWeb ? AppMain() : WebApp());
 }
 

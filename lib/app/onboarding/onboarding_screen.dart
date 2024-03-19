@@ -22,16 +22,16 @@ class OnBoardingPage extends StatelessWidget {
           child: IntroductionScreen(
             pages: [
               PageViewModel(
-                title: 'Sell a home',
+                title: 'Skill Chain',
                 body:
-                    'Whether you choose traditional listing or explore innovative selling methods, we\'re here to guide you towards a successful home sale.',
+                    'Skill verification ensures that individuals possess the competencies claimed, fostering trust and reliability in their capabilities.',
                 image: buildImage(assetImage("skill")),
                 decoration: getPageDecoration(),
               ),
               PageViewModel(
-                title: 'Buy a home',
+                title: 'Blockchain',
                 body:
-                    'Discover your perfect home with us, where comfort meets your vision of a dream property.',
+                    "Blockchain-based skill verification securely confirms individuals' abilities by recording credentials in an immutable ledger, enhancing trust and transparency.",
                 image: buildImage(assetImage("block_chain")),
                 decoration: getPageDecoration(),
               ),

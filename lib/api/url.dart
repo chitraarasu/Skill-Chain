@@ -16,6 +16,12 @@ extension URLExtension on APIRequest {
         return "/add_skill";
       case EAPIRequest.allUsers:
         return "";
+      case EAPIRequest.signIn:
+        return "/login";
+      case EAPIRequest.signUp:
+        return "/signup";
+      case EAPIRequest.profile:
+        return "/profile";
     }
   }
 }

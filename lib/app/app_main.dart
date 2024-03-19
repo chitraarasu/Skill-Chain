@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:skill_chain/app/app_controller/app_controller.dart';
 import 'package:skill_chain/app/dashboard/dashboard.dart';
 import 'package:skill_chain/app/onboarding/onboarding_screen.dart';
 import 'package:skill_chain/web/utils/resizer/fetch_pixels.dart';
@@ -15,7 +16,6 @@ class AppMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FetchPixels(context);
-    bool? isSkipped = box.read("isSkipped");
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Skill Chain',
@@ -30,7 +30,11 @@ class AppMain extends StatelessWidget {
           thickness: MaterialStateProperty.all(0),
         ),
       ),
-      home: (isSkipped ?? false) ? Dashboard() : OnBoardingPage(),
+      home: Obx(
+        () => AppRouteController.to.token.value != null
+            ? Dashboard()
+            : OnBoardingPage(),
+      ),
       initialBinding: AppBinder(),
     );
   }

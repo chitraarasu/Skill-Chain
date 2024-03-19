@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:skill_chain/app/app_controller/app_controller.dart';
 
 import '../../web/utils/buttons/primary_button.dart';
 import '../../web/utils/color_manager.dart';
@@ -9,7 +10,11 @@ import '../../web/utils/widgets/custom_textfield.dart';
 import '../../web/utils/widgets/widgets.dart';
 
 class SignUp extends StatelessWidget {
-  const SignUp({super.key});
+  TextEditingController name = TextEditingController();
+  TextEditingController mobile = TextEditingController();
+  TextEditingController emailId = TextEditingController();
+  TextEditingController password = TextEditingController();
+  TextEditingController address = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +55,7 @@ class SignUp extends StatelessWidget {
                   fontColor: colorGrey1,
                 ),
                 vSpace(10),
-                CustomTextField(height: 44),
+                CustomTextField(height: 44, controller: name),
                 vSpace(10),
                 getCustomFont(
                   "Mobile number",
@@ -59,7 +64,7 @@ class SignUp extends StatelessWidget {
                   fontColor: colorGrey1,
                 ),
                 vSpace(10),
-                CustomTextField(height: 44),
+                CustomTextField(height: 44, controller: mobile),
                 vSpace(10),
                 getCustomFont(
                   "Email id",
@@ -68,7 +73,7 @@ class SignUp extends StatelessWidget {
                   fontColor: colorGrey1,
                 ),
                 vSpace(10),
-                CustomTextField(height: 44),
+                CustomTextField(height: 44, controller: emailId),
                 vSpace(10),
                 getCustomFont(
                   "Password",
@@ -77,7 +82,7 @@ class SignUp extends StatelessWidget {
                   fontColor: colorGrey1,
                 ),
                 vSpace(10),
-                CustomTextField(height: 44),
+                CustomTextField(height: 44, controller: password),
                 vSpace(10),
                 getCustomFont(
                   "Address",
@@ -89,13 +94,43 @@ class SignUp extends StatelessWidget {
                 CustomTextField(
                   height: 44,
                   maxLine: 3,
+                  controller: address,
                 ),
                 Row(
                   children: [
                     Expanded(
                       child: PrimaryButton(
                         "Sign Up",
-                        onTap: () {},
+                        onTap: () {
+                          if (name.text.isEmpty) {
+                            toastPlatform("Enter your name!");
+                            return;
+                          }
+                          if (!mobile.text.isPhoneNumber) {
+                            toastPlatform("Enter valid mobile number!");
+                            return;
+                          }
+                          if (!emailId.text.isEmail) {
+                            toastPlatform("Enter valid email!");
+                            return;
+                          }
+                          if (password.text.length > 6) {
+                            toastPlatform(
+                                "Password should be above 6 characters!");
+                            return;
+                          }
+                          if (address.text.isEmpty) {
+                            toastPlatform("Enter your address!");
+                            return;
+                          }
+                          AppRouteController.to.signUp(
+                            name: name.text,
+                            address: address.text,
+                            mobileNo: mobile.text,
+                            email: emailId.text,
+                            password: password.text,
+                          );
+                        },
                         buttonColor: darkBlue,
                         radius: 10,
                         textColor: Colors.white,

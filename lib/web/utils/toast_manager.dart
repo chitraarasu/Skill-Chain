@@ -8,7 +8,7 @@ import 'font_manager.dart';
 class ToastManager {
   static final shared = ToastManager();
   OverlayEntry? entry;
-  final debounce = Debouncer(delay: const Duration(seconds: 4));
+  final debounce = Debouncer(delay: const Duration(seconds: 2));
 
   show(
     String msg, {
@@ -68,7 +68,7 @@ class ToastView extends StatelessWidget {
                 child: Container(
                   constraints: const BoxConstraints(minWidth: 250),
                   decoration: BoxDecoration(
-                    // color: buttonColor.withOpacity(0.9),
+                    color: orange.withOpacity(0.9),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   padding:
@@ -80,7 +80,7 @@ class ToastView extends StatelessWidget {
                       fontFamily: firstFont,
                       fontWeight: isSuccess ? semiBold : regular,
                       fontSize: 16,
-                      color: isSuccess ? Colors.green : brown,
+                      color: Colors.white,
                     ),
                   ),
                 ),

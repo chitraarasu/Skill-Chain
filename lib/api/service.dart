@@ -6,6 +6,9 @@ enum EAPIRequest {
   getUserFromPublicIds,
   addSkill,
   allUsers,
+  signIn,
+  signUp,
+  profile,
 }
 
 abstract class AAPIRequest {
