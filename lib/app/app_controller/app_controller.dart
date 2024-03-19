@@ -125,6 +125,7 @@ class AppRouteController extends GetxController {
     } else {
       toastPlatform("Something went wrong! please try again later.");
     }
+    return res.data["data"];
   }
 
   logout() {

@@ -10,12 +10,15 @@ import '../../../../web/utils/font_manager.dart';
 import '../../../../web/utils/ui_element.dart';
 import '../../../../web/utils/widgets/custom_textfield.dart';
 import '../../../../web/utils/widgets/widgets.dart';
+import '../../../app_controller/app_controller.dart';
 
 class AppProfile extends StatelessWidget {
   GetStorage box = GetStorage();
 
   @override
   Widget build(BuildContext context) {
+    AppRouteController appRouteController = Get.find();
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -45,6 +48,8 @@ class AppProfile extends StatelessWidget {
                       CustomTextField(
                         height: 44,
                         enable: false,
+                        controller: TextEditingController(
+                            text: appRouteController.loggedInUser.value?.name),
                       ),
                       vSpace(10),
                       getCustomFont(
@@ -57,6 +62,9 @@ class AppProfile extends StatelessWidget {
                       CustomTextField(
                         height: 44,
                         enable: false,
+                        controller: TextEditingController(
+                            text: appRouteController
+                                .loggedInUser.value?.mobileNo),
                       ),
                       vSpace(10),
                       getCustomFont(
@@ -69,18 +77,9 @@ class AppProfile extends StatelessWidget {
                       CustomTextField(
                         enable: false,
                         height: 44,
-                      ),
-                      vSpace(10),
-                      getCustomFont(
-                        "Password",
-                        16,
-                        fontWeight: semiBold,
-                        fontColor: colorGrey1,
-                      ),
-                      vSpace(10),
-                      CustomTextField(
-                        height: 44,
-                        enable: false,
+                        controller: TextEditingController(
+                            text:
+                                appRouteController.loggedInUser.value?.emailId),
                       ),
                       vSpace(10),
                       getCustomFont(
@@ -94,6 +93,9 @@ class AppProfile extends StatelessWidget {
                         height: 44,
                         maxLine: 3,
                         enable: false,
+                        controller: TextEditingController(
+                            text:
+                                appRouteController.loggedInUser.value?.address),
                       ),
                     ],
                   ),

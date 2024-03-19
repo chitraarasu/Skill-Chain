@@ -97,6 +97,8 @@ getErrorMessage(msg) {
       fontWeight:
           msg.toString().contains("brand is coming soon") ? semiBold : regular,
       textAlign: TextAlign.center,
+      // maxLine: 3,
+      overflow: TextOverflow.visible,
     ),
   );
 }

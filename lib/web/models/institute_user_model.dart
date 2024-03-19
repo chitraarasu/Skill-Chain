@@ -4,13 +4,15 @@
 
 import 'dart:convert';
 
+import 'package:skill_chain/app/dashboard/screens/verification/app_add_skill.dart';
+
 InstituteUserModel customUserModelFromJson(String str) =>
     InstituteUserModel.fromJson(json.decode(str));
 
 String customUserModelToJson(InstituteUserModel data) =>
     json.encode(data.toJson());
 
-class InstituteUserModel {
+class InstituteUserModel extends NamedItem {
   final String? logo;
   final String? instituteAccess;
   final String? instituteEmail;
@@ -53,4 +55,7 @@ class InstituteUserModel {
         "uid": uid,
         "password": password,
       };
+
+  @override
+  String get name => instituteName ?? "";
 }
