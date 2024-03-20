@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 import '../app/app_controller/app_controller.dart';
@@ -18,16 +19,20 @@ extension AdditionalExtension on APIRequest {
   }
 
   Map<String, String> getHeader() {
-    AppRouteController authController = Get.find();
-    switch (type) {
-      default:
-        if (authController.token.value == null) {
-          return {};
-        } else {
-          return {
-            "Authorization": 'Bearer ${authController.token.value}',
-          };
-        }
+    if (kIsWeb) {
+      return {};
+    } else {
+      AppRouteController authController = Get.find();
+      switch (type) {
+        default:
+          if (authController.token.value == null) {
+            return {};
+          } else {
+            return {
+              "Authorization": 'Bearer ${authController.token.value}',
+            };
+          }
+      }
     }
   }
 }

@@ -500,46 +500,11 @@ class UsersTile extends StatelessWidget {
                                                     ),
                                                     GestureDetector(
                                                       onTap: () {
-                                                        showDialog(
-                                                          context: context,
-                                                          builder: (_) =>
-                                                              AlertDialog(
-                                                            insetPadding:
-                                                                EdgeInsets.zero,
-                                                            contentPadding:
-                                                                EdgeInsets.zero,
-                                                            content: Container(
-                                                              width: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  .65,
-                                                              height: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .height *
-                                                                  .95,
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .all(20),
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: Colors
-                                                                    .white,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            15),
-                                                              ),
-                                                              child: SfPdfViewer
-                                                                  .network(data
-                                                                          ?.skills?[
-                                                                              index]
-                                                                          .skillDoc ??
-                                                                      ""),
-                                                            ),
-                                                          ),
-                                                        );
+                                                        openDoc(
+                                                            context,
+                                                            data?.skills?[index]
+                                                                    .skillDoc ??
+                                                                "");
                                                       },
                                                       child: Row(
                                                         mainAxisAlignment:
@@ -594,4 +559,24 @@ class UsersTile extends StatelessWidget {
       ),
     );
   }
+}
+
+openDoc(BuildContext context, String url) {
+  showDialog(
+    context: context,
+    builder: (_) => AlertDialog(
+      insetPadding: EdgeInsets.zero,
+      contentPadding: EdgeInsets.zero,
+      content: Container(
+        width: MediaQuery.of(context).size.width * .65,
+        height: MediaQuery.of(context).size.height * .95,
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: SfPdfViewer.network(url),
+      ),
+    ),
+  );
 }

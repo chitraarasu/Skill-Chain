@@ -16,6 +16,7 @@ class RequestModel {
   final String? userId;
   final String? certificateUrl;
   final String? skillId;
+  final String? requestId;
 
   RequestModel({
     this.status,
@@ -23,6 +24,7 @@ class RequestModel {
     this.userId,
     this.certificateUrl,
     this.skillId,
+    this.requestId,
   });
 
   factory RequestModel.fromJson(Map<String, dynamic> json) => RequestModel(
@@ -31,6 +33,7 @@ class RequestModel {
         userId: json["user_id"],
         certificateUrl: json["certificate_url"],
         skillId: json["skill_id"],
+        requestId: json["req_id"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -39,5 +42,6 @@ class RequestModel {
         "user_id": userId,
         "certificate_url": certificateUrl,
         "skill_id": skillId,
+        "req_id": requestId,
       };
 }

@@ -11,7 +11,8 @@ class WebVerificationController extends GetxController {
 
   RxList<BcUser> selectedUsers = RxList([]);
 
-  Future getUserFromPublicId(List<String> data, Function() onTap) async {
+  Future<BcUserModel?> getUserFromPublicId(
+      List<String> data, Function() onTap) async {
     var res = await APIManager.shared.response(
       APIRequest(EAPIRequest.getUserFromPublicIds, param: {
         "public_ids": data,
@@ -27,9 +28,11 @@ class WebVerificationController extends GetxController {
         selectedUsers.value = data.data ?? [];
         onTap();
       }
+      return data;
     } catch (e) {
       print(e);
       webToast(e.toString());
+      return null;
     }
   }
 
