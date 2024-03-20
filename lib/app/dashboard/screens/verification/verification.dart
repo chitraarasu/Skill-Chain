@@ -11,6 +11,7 @@ import '../../../../web/utils/ui_element.dart';
 import '../../../../web/utils/widgets/widgets.dart';
 import '../../../app_controller/app_controller.dart';
 import '../app_home/app_home.dart';
+import '../app_home/open_certificate.dart';
 import 'app_add_skill.dart';
 
 class AppVerification extends StatelessWidget {
@@ -120,7 +121,9 @@ class AppVerification extends StatelessWidget {
                                               );
                                               return GestureDetector(
                                                 onTap: () {
-                                                  // Get.to(() => const OpenCertificate());
+                                                  Get.to(() => OpenCertificate(
+                                                      item.certificateUrl ??
+                                                          ""));
                                                 },
                                                 child: SkillCard(
                                                   true,
