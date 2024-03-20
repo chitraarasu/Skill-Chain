@@ -183,7 +183,7 @@ class AppHome extends StatelessWidget {
                                           15,
                                           fontWeight: semiBold,
                                         ),
-                                        Spacer(),
+                                        const Spacer(),
                                         IconButton(
                                           onPressed: () {
                                             Clipboard.setData(ClipboardData(
@@ -227,35 +227,41 @@ class AppHome extends StatelessWidget {
                                                 .loggedInUser.value?.skills
                                                 ?.map(
                                                   (item) => Builder(
-                                                      builder: (context) {
-                                                    InstituteUserModel
-                                                        instituteItem =
-                                                        insData.firstWhere(
-                                                            (element) =>
-                                                                element.uid ==
-                                                                item.instituteId);
-                                                    SkillsModel skillItem = data
-                                                        .firstWhere((element) =>
+                                                    builder: (context) {
+                                                      InstituteUserModel
+                                                          instituteItem =
+                                                          insData.firstWhere(
+                                                        (element) =>
+                                                            element.uid ==
+                                                            item.instituteId,
+                                                      );
+                                                      SkillsModel skillItem =
+                                                          data.firstWhere(
+                                                        (element) =>
                                                             element.skillId ==
-                                                            item.skillId);
-                                                    return GestureDetector(
-                                                      onTap: () {
-                                                        Get.to(() =>
-                                                            OpenCertificate(
+                                                            item.skillId,
+                                                      );
+                                                      return GestureDetector(
+                                                        onTap: () {
+                                                          Get.to(
+                                                            () => OpenCertificate(
                                                                 item.skillDoc ??
-                                                                    ""));
-                                                      },
-                                                      child: SkillCard(
-                                                        false,
-                                                        image:
-                                                            instituteItem.logo,
-                                                        institute: instituteItem
-                                                            .instituteName,
-                                                        skillName:
-                                                            skillItem.name,
-                                                      ),
-                                                    );
-                                                  }),
+                                                                    ""),
+                                                          );
+                                                        },
+                                                        child: SkillCard(
+                                                          false,
+                                                          image: instituteItem
+                                                              .logo,
+                                                          institute:
+                                                              instituteItem
+                                                                  .instituteName,
+                                                          skillName:
+                                                              skillItem.name,
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
                                                 )
                                                 .toList() ??
                                             [],

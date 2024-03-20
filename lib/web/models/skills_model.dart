@@ -4,24 +4,27 @@
 
 import 'dart:convert';
 
+import 'package:skill_chain/app/dashboard/screens/verification/app_add_skill.dart';
+
 List<SkillsModel> skillsModelFromJson(List list) =>
     List<SkillsModel>.from(list.map((x) => SkillsModel.fromJson(x)));
 
 String skillsModelToJson(List<SkillsModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class SkillsModel {
+class SkillsModel extends NamedItem {
   // final Timestamp? createdTime;
   final String? accessId;
   final String? category;
-  final String? name;
+  @override
+  String name;
   final String? skillId;
 
   SkillsModel({
     // this.createdTime,
     this.accessId,
     this.category,
-    this.name,
+    this.name = "",
     this.skillId,
   });
 

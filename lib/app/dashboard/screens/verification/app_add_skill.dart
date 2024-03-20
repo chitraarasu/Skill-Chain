@@ -1,21 +1,33 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skill_chain/web/utils/loading_manager.dart';
 
 import '../../../../web/models/institute_user_model.dart';
+import '../../../../web/models/skills_model.dart';
 import '../../../../web/utils/buttons/primary_button.dart';
 import '../../../../web/utils/color_manager.dart';
 import '../../../../web/utils/font_manager.dart';
 import '../../../../web/utils/ui_element.dart';
 import '../../../../web/utils/widgets/widgets.dart';
+import '../../../app_controller/app_controller.dart';
 
 class AppAddSkill extends StatelessWidget {
   const AppAddSkill({super.key});
 
   @override
   Widget build(BuildContext context) {
+    AppRouteController appRouteController = Get.find();
+
     Rxn<InstituteUserModel> selectedInstitute = Rxn();
+    Rxn<List<SkillsModel>> skillList = Rxn();
+    Rxn<SkillsModel> selectedSkill = Rxn();
+    Rxn<PlatformFile> pickedFile = Rxn();
+
     return Scaffold(
       appBar: AppBar(
         title: getCustomFont("Add Skill", 20, fontWeight: bold),
@@ -56,8 +68,23 @@ class AppAddSkill extends StatelessWidget {
                               () => CustomDropDown<InstituteUserModel>(
                                 selectedItem: selectedInstitute.value,
                                 items: insData,
-                                onChange: (item) {
+                                onChange: (item) async {
                                   selectedInstitute.value = item;
+                                  selectedSkill.value = null;
+                                  skillList.value = [];
+                                  QuerySnapshot<Map<String, dynamic>> res =
+                                      await FirebaseFirestore.instance
+                                          .collection("skills")
+                                          .get();
+                                  print(res.docs.map((e) => e.data()).toList());
+                                  List<SkillsModel> skillData =
+                                      skillsModelFromJson(res.docs
+                                          .map((e) => e.data())
+                                          .toList());
+                                  skillList.value = skillData
+                                      .where(
+                                          (e) => e.accessId == item?.accessId)
+                                      .toList();
                                 },
                               ),
                             ),
@@ -69,7 +96,15 @@ class AppAddSkill extends StatelessWidget {
                               fontColor: colorGrey1,
                             ),
                             vSpace(10),
-                            CustomDropDown(),
+                            Obx(
+                              () => CustomDropDown<SkillsModel>(
+                                selectedItem: selectedSkill.value,
+                                items: skillList.value,
+                                onChange: (item) async {
+                                  selectedSkill.value = item;
+                                },
+                              ),
+                            ),
                             vSpace(15),
                             getCustomFont(
                               "Select Certificate",
@@ -78,23 +113,38 @@ class AppAddSkill extends StatelessWidget {
                               fontColor: colorGrey1,
                             ),
                             vSpace(10),
-                            Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(width: 1),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: getCustomFont(
-                                        "Select File",
-                                        15,
-                                        fontWeight: medium,
-                                      ),
+                            GestureDetector(
+                              onTap: () async {
+                                FilePickerResult? result =
+                                    await FilePicker.platform.pickFiles();
+
+                                if (result != null) {
+                                  PlatformFile file = result.files.single;
+                                  pickedFile.value = file;
+                                }
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(width: 1),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Obx(
+                                    () => Row(
+                                      children: [
+                                        Expanded(
+                                          child: getCustomFont(
+                                            pickedFile.value != null
+                                                ? pickedFile.value?.name ?? ""
+                                                : "Select File",
+                                            15,
+                                            fontWeight: medium,
+                                          ),
+                                        ),
+                                        Icon(Icons.add_box_outlined),
+                                      ],
                                     ),
-                                    Icon(Icons.add_box_outlined),
-                                  ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -113,7 +163,44 @@ class AppAddSkill extends StatelessWidget {
                               isNeedBorder: true,
                               textColor: orange,
                               radius: 10,
-                              onTap: () {},
+                              onTap: () async {
+                                if (selectedInstitute.value == null) {
+                                  toastPlatform("Select an institute!");
+                                  return;
+                                }
+                                if (selectedSkill.value == null) {
+                                  toastPlatform("Select your skill!");
+                                  return;
+                                }
+                                if (pickedFile.value == null) {
+                                  toastPlatform("Select a certificate!");
+                                  return;
+                                }
+
+                                Reference storageReference =
+                                    FirebaseStorage.instance.ref().child(
+                                        'request_certificates/${selectedInstitute.value?.uid}-${selectedSkill.value?.skillId}-${appRouteController.loggedInUser.value?.publicId}.pdf');
+
+                                UploadTask uploadTask = storageReference
+                                    .putFile(File(pickedFile.value!.path!));
+
+                                await uploadTask.whenComplete(() async {
+                                  String? docUrl =
+                                      await storageReference.getDownloadURL();
+                                  print('Image URL: $docUrl');
+
+                                  FirebaseFirestore.instance
+                                      .collection("requests")
+                                      .add({
+                                    "industry_id": selectedInstitute.value?.uid,
+                                    "skill_id": selectedSkill.value?.skillId,
+                                    "user_id": appRouteController
+                                        .loggedInUser.value?.publicId,
+                                    "certificate_url": docUrl,
+                                    "status": "Pending"
+                                  });
+                                });
+                              },
                             ),
                           ),
                         ],

@@ -21,6 +21,7 @@ class InstituteUserModel extends NamedItem {
   final String? instituteName;
   final String? uid;
   final String? password;
+  final String? accessId;
 
   InstituteUserModel({
     this.logo,
@@ -31,6 +32,7 @@ class InstituteUserModel extends NamedItem {
     this.instituteName,
     this.uid,
     this.password,
+    this.accessId,
   });
 
   factory InstituteUserModel.fromJson(Map<String, dynamic> json) =>
@@ -43,6 +45,7 @@ class InstituteUserModel extends NamedItem {
         instituteName: json["institute_name"],
         uid: json["uid"],
         password: json["password"],
+        accessId: json["access_id"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -54,6 +57,7 @@ class InstituteUserModel extends NamedItem {
         "institute_name": instituteName,
         "uid": uid,
         "password": password,
+        "access_id": accessId,
       };
 
   @override
