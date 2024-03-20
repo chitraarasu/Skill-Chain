@@ -176,7 +176,7 @@ class AppAddSkill extends StatelessWidget {
                                   toastPlatform("Select a certificate!");
                                   return;
                                 }
-
+                                LoadingManager.shared.showLoading();
                                 Reference storageReference =
                                     FirebaseStorage.instance.ref().child(
                                         'request_certificates/${selectedInstitute.value?.uid}-${selectedSkill.value?.skillId}-${appRouteController.loggedInUser.value?.publicId}.pdf');
@@ -199,6 +199,8 @@ class AppAddSkill extends StatelessWidget {
                                     "certificate_url": docUrl,
                                     "status": "Pending"
                                   });
+                                  LoadingManager.shared.hideLoading();
+                                  Get.back();
                                 });
                               },
                             ),
