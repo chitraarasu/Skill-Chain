@@ -189,9 +189,14 @@ class AppAddSkill extends StatelessWidget {
                                       await storageReference.getDownloadURL();
                                   print('Image URL: $docUrl');
 
+                                  var docId = FirebaseFirestore.instance
+                                      .collection("requests")
+                                      .doc();
                                   FirebaseFirestore.instance
                                       .collection("requests")
-                                      .add({
+                                      .doc(docId.id)
+                                      .set({
+                                    "request_id": docId.id,
                                     "industry_id": selectedInstitute.value?.uid,
                                     "skill_id": selectedSkill.value?.skillId,
                                     "user_id": appRouteController

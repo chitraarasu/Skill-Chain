@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -29,6 +28,47 @@ class AppProfile extends StatelessWidget {
             vSpace(20),
             getCustomFont("Profile", 20, fontWeight: bold),
             vSpace(12.5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.grey,
+                      child: Obx(
+                        () => CircleAvatar(
+                          radius: 49,
+                          backgroundColor: Colors.white,
+                          backgroundImage:
+                              appRouteController.profileImage.value != null
+                                  ? FileImage(
+                                      appRouteController.profileImage.value!)
+                                  : NetworkImage(appRouteController
+                                          .loggedInUser.value?.imageUrl ??
+                                      "") as ImageProvider,
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        appRouteController.pickProfileImage();
+                      },
+                      child: CircleAvatar(
+                        backgroundColor: Colors.grey,
+                        radius: 15,
+                        child: Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                          size: 15,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
             vSpace(7.5),
             Expanded(
               child: SingleChildScrollView(

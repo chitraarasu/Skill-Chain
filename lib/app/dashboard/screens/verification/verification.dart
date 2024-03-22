@@ -48,8 +48,10 @@ class AppVerification extends StatelessWidget {
             vSpace(12.5),
             vSpace(7.5),
             Expanded(
-              child: FutureBuilder(
-                future: FirebaseFirestore.instance.collection("requests").get(),
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection("requests")
+                    .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
                         reqSnap) {

@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:skill_chain/web/models/bc_user_model.dart';
@@ -5,6 +9,7 @@ import 'package:skill_chain/web/utils/ui_element.dart';
 
 import '../../api/api_manager.dart';
 import '../../api/service.dart';
+import '../../web/utils/loading_manager.dart';
 import '../dashboard/dashboard.dart';
 
 class AppRouteController extends GetxController {
@@ -126,6 +131,38 @@ class AppRouteController extends GetxController {
       toastPlatform("Something went wrong! please try again later.");
     }
     return res.data["data"];
+  }
+
+  Rxn<File> profileImage = Rxn();
+
+  pickProfileImage() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+    );
+    if (result != null) {
+      profileImage.value =
+          result.paths.map((path) => File(path!)).toList().first;
+      changeProfile();
+    }
+  }
+
+  Future changeProfile() async {
+    if (profileImage.value != null) {
+      LoadingManager.shared.showLoading();
+      Reference storageReference = FirebaseStorage.instance
+          .ref()
+          .child('bc_user/${loggedInUser.value?.publicId}.png');
+
+      UploadTask uploadTask = storageReference.putFile(profileImage.value!);
+
+      await uploadTask.whenComplete(() async {
+        String imageUrl = await storageReference.getDownloadURL();
+        print('Image URL: $imageUrl');
+
+        /// URL on DB
+        LoadingManager.shared.hideLoading();
+      });
+    }
   }
 
   logout() {
