@@ -1,5 +1,6 @@
 import 'package:auto_height_grid_view/auto_height_grid_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skill_chain/web/utils/color_manager.dart';
@@ -86,10 +87,26 @@ class Users extends StatelessWidget {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return kLoading;
                 } else if (snapshot.hasData) {
+                  List<BcUser> data = snapshot.data
+                          ?.where(
+                            (e) => FirebaseAuth.instance.currentUser?.email ==
+                                    "admin@skillchain.com"
+                                ? true
+                                : (e.skills ?? [])
+                                    .map((item) => item.toJson())
+                                    .toList()
+                                    .toString()
+                                    .contains(FirebaseAuth
+                                            .instance.currentUser?.uid ??
+                                        ""),
+                          )
+                          .toList() ??
+                      [];
+                  print(data);
                   return ListView.builder(
-                    itemCount: snapshot.data?.length,
+                    itemCount: data.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return UsersTile(data: snapshot.data?[index]);
+                      return UsersTile(data: data[index]);
                     },
                   );
                 } else {

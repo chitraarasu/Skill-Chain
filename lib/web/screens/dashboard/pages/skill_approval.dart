@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skill_chain/web/controller/web_auth_controller.dart';
@@ -33,6 +34,7 @@ class SkillApproval extends StatelessWidget {
   Widget build(BuildContext context) {
     WebAuthController webAuthController = Get.find();
     WebVerificationController webVerificationController = Get.find();
+
     return Padding(
       padding: const EdgeInsets.all(40.0),
       child: Column(
@@ -95,10 +97,13 @@ class SkillApproval extends StatelessWidget {
                           .toList() ??
                       [];
                   List<RequestModel> currentUserReqData = reqData
-                      .where((e) =>
-                          e.industryId ==
-                              webAuthController.customLoggedInUser.value?.uid &&
-                          e.status == "Pending")
+                      .where((e) => FirebaseAuth.instance.currentUser?.email ==
+                              "admin@skillchain.com"
+                          ? true && e.status == "Pending"
+                          : e.industryId ==
+                                  webAuthController
+                                      .customLoggedInUser.value?.uid &&
+                              e.status == "Pending")
                       .toList();
                   return FutureBuilder(
                     future:
@@ -165,7 +170,7 @@ class SkillApproval extends StatelessWidget {
                                                 width: 55,
                                                 child: Center(
                                                   child: getCustomFont(
-                                                    index.toString(),
+                                                    (index + 1).toString(),
                                                     14,
                                                     fontColor: Colors.black,
                                                     fontWeight: medium,
@@ -465,14 +470,7 @@ class SkillApproval extends StatelessWidget {
                                                                                         borderColor: orange,
                                                                                         onTap: () async {
                                                                                           LoadingManager.shared.showLoading();
-                                                                                          try {
-                                                                                            await FirebaseFirestore.instance.collection("requests").doc(currentUserReqData[index].requestId).update({
-                                                                                              "status": "Rejected",
-                                                                                            });
-                                                                                          } catch (e) {
-                                                                                            print(e);
-                                                                                          }
-
+                                                                                          await updateStatus("Rejected", currentUserReqData[index].requestId);
                                                                                           LoadingManager.shared.hideLoading();
                                                                                           Get.back();
                                                                                         },
@@ -485,6 +483,28 @@ class SkillApproval extends StatelessWidget {
                                                                                         buttonColor: darkGreen,
                                                                                         radius: 10,
                                                                                         textColor: Colors.black,
+                                                                                        onTap: () async {
+                                                                                          LoadingManager.shared.showLoading();
+                                                                                          BcUser user = BcUser(
+                                                                                            publicId: currentUserReqData[index].userId,
+                                                                                          );
+                                                                                          user.selectedDocUrl.value = currentUserReqData[index].certificateUrl;
+                                                                                          List<bool> res = await webVerificationController.addSkill(
+                                                                                            currentUserReqData[index].skillId ?? "",
+                                                                                            currentUserReqData[index].industryId ?? "",
+                                                                                            users: [user],
+                                                                                          );
+
+                                                                                          if (res.first) {
+                                                                                            await updateStatus("Approved", currentUserReqData[index].requestId);
+                                                                                            toastPlatform("Skill added successfully!");
+                                                                                          } else {
+                                                                                            await updateStatus("Rejected", currentUserReqData[index].requestId);
+                                                                                            toastPlatform("Failed to approve!");
+                                                                                          }
+                                                                                          Get.back();
+                                                                                          LoadingManager.shared.hideLoading();
+                                                                                        },
                                                                                       ),
                                                                                     ),
                                                                                   ],
@@ -533,5 +553,18 @@ class SkillApproval extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  updateStatus(String status, reqId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("requests")
+          .doc(reqId)
+          .update({
+        "status": status,
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 }

@@ -36,10 +36,11 @@ class WebVerificationController extends GetxController {
     }
   }
 
-  Future<List<bool>> addSkill(String skillId, String instituteId) async {
+  Future<List<bool>> addSkill(String skillId, String instituteId,
+      {List<BcUser>? users}) async {
     var body = {
       "skill_id": skillId,
-      "users": selectedUsers
+      "users": (users ?? selectedUsers)
           .map(
             (element) => {
               "public_id": element.publicId,
