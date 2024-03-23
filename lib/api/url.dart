@@ -22,6 +22,8 @@ extension URLExtension on APIRequest {
         return "/signup";
       case EAPIRequest.profile:
         return "/profile";
+      case EAPIRequest.updateProfile:
+        return "/update_profile";
     }
   }
 }

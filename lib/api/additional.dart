@@ -11,6 +11,7 @@ extension AdditionalExtension on APIRequest {
       case EAPIRequest.addSkill:
       case EAPIRequest.signIn:
       case EAPIRequest.signUp:
+      case EAPIRequest.updateProfile:
         return 'POST';
       case EAPIRequest.allUsers:
       case EAPIRequest.profile:

@@ -9,6 +9,7 @@ enum EAPIRequest {
   signIn,
   signUp,
   profile,
+  updateProfile,
 }
 
 abstract class AAPIRequest {

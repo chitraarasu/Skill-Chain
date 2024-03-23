@@ -159,7 +159,22 @@ class AppRouteController extends GetxController {
         String imageUrl = await storageReference.getDownloadURL();
         print('Image URL: $imageUrl');
 
-        /// URL on DB
+        var res = await APIManager.shared.response(
+          APIRequest(EAPIRequest.updateProfile, param: {
+            "image_url": imageUrl,
+          }),
+          isNeedLoading: true,
+          isNeedErrorAlert: true,
+        );
+
+        if (res is Error) return null;
+
+        if (res.data["status"]) {
+          box.write("profileData", res.data["data"]);
+          toastPlatform("Profile update successful!");
+        } else {
+          toastPlatform("Something went wrong! please try again later.");
+        }
         LoadingManager.shared.hideLoading();
       });
     }
