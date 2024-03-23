@@ -64,7 +64,11 @@ class Login extends StatelessWidget {
                   fontColor: colorGrey1,
                 ),
                 vSpace(10),
-                CustomTextField(height: 44, controller: password),
+                CustomTextField(
+                  height: 44,
+                  controller: password,
+                  hide: true,
+                ),
                 vSpace(50),
                 Row(
                   children: [

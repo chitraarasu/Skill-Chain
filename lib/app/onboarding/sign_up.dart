@@ -55,7 +55,11 @@ class SignUp extends StatelessWidget {
                   fontColor: colorGrey1,
                 ),
                 vSpace(10),
-                CustomTextField(height: 44, controller: name),
+                CustomTextField(
+                  height: 44,
+                  controller: name,
+                  keyboardType: TextInputType.text,
+                ),
                 vSpace(10),
                 getCustomFont(
                   "Mobile number",
@@ -64,7 +68,11 @@ class SignUp extends StatelessWidget {
                   fontColor: colorGrey1,
                 ),
                 vSpace(10),
-                CustomTextField(height: 44, controller: mobile),
+                CustomTextField(
+                  height: 44,
+                  controller: mobile,
+                  keyboardType: TextInputType.number,
+                ),
                 vSpace(10),
                 getCustomFont(
                   "Email id",
@@ -73,7 +81,11 @@ class SignUp extends StatelessWidget {
                   fontColor: colorGrey1,
                 ),
                 vSpace(10),
-                CustomTextField(height: 44, controller: emailId),
+                CustomTextField(
+                  height: 44,
+                  controller: emailId,
+                  keyboardType: TextInputType.emailAddress,
+                ),
                 vSpace(10),
                 getCustomFont(
                   "Password",
@@ -82,7 +94,12 @@ class SignUp extends StatelessWidget {
                   fontColor: colorGrey1,
                 ),
                 vSpace(10),
-                CustomTextField(height: 44, controller: password),
+                CustomTextField(
+                  height: 44,
+                  controller: password,
+                  keyboardType: TextInputType.visiblePassword,
+                  hide: true,
+                ),
                 vSpace(10),
                 getCustomFont(
                   "Address",
@@ -95,6 +112,7 @@ class SignUp extends StatelessWidget {
                   height: 44,
                   maxLine: 3,
                   controller: address,
+                  keyboardType: TextInputType.streetAddress,
                 ),
                 Row(
                   children: [
