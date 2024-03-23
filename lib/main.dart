@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:skill_chain/api/url.dart';
 import 'package:skill_chain/web/controller/web_auth_controller.dart';
 import 'package:skill_chain/web/web_main.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -23,6 +24,7 @@ Future<void> main() async {
   }
   HttpOverrides.global = MyHttpOverrides();
   await GetStorage.init();
+  await fetchBaseUrl();
   runApp(!kIsWeb ? AppMain() : WebApp());
 }
 

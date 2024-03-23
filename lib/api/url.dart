@@ -1,10 +1,24 @@
+import 'package:dio/dio.dart';
+
 import 'service.dart';
+
+String? _url;
+
+Future<String?> fetchBaseUrl() async {
+  var response = await Dio()
+      .get('https://chitraarasu.github.io/Skill-Chain/lib/path.json');
+  print(response.data.toString());
+  if (response.data["active"]) {
+    _url = response.data["url"];
+  }
+  return _url;
+}
 
 extension URLExtension on APIRequest {
   String getBaseURL() {
     switch (type) {
       default:
-        return 'http://localhost:3000'; // Fetch from api
+        return _url ?? 'http://localhost:3000';
     }
   }
 
