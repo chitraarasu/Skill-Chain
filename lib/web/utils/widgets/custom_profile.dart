@@ -22,7 +22,7 @@ class CustomProfile extends StatelessWidget {
             width: width ?? 55,
             height: width ?? 55,
             child: ClipOval(
-              child: image == null
+              child: !image.toString().contains("http")
                   ? Container(
                       color: brown1,
                       child: Padding(

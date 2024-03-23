@@ -262,6 +262,7 @@ class Verification extends StatelessWidget {
               child: Padding(
                 padding: isFromHome ? EdgeInsets.all(15) : EdgeInsets.all(30.0),
                 child: Container(
+                  height: double.infinity,
                   decoration: BoxDecoration(
                     color: colorWhite.withOpacity(.6),
                     borderRadius: BorderRadius.circular(15),

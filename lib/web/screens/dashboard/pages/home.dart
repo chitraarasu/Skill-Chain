@@ -1,10 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:skill_chain/web/screens/dashboard/pages/verification.dart';
 import 'package:skill_chain/web/utils/font_manager.dart';
 import 'package:skill_chain/web/utils/ui_element.dart';
 import 'package:skill_chain/web/utils/widgets/widgets.dart';
 
+import '../../../controller/web_auth_controller.dart';
+import '../../../controller/web_verification_controller.dart';
+import '../../../models/bc_user_model.dart';
+import '../../../models/skill_request_model.dart';
 import '../../../utils/color_manager.dart';
+import '../../../utils/loading_manager.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -47,7 +55,7 @@ class Home extends StatelessWidget {
     );
   }
 
-  Widget bottomBox() {
+  Widget bottomBox(String title, String subTitle) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Stack(
@@ -65,9 +73,10 @@ class Home extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   vSpace(15),
-                  getCustomFont("This Day", 16, fontWeight: semiBold),
+                  getCustomFont(title, 16,
+                      fontWeight: semiBold, overflow: TextOverflow.visible),
                   Spacer(),
-                  getCustomFont("133 ", 35, fontWeight: bold),
+                  getCustomFont(subTitle, 35, fontWeight: bold),
                 ],
               ),
             ),
@@ -93,6 +102,9 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WebVerificationController webVerify = Get.find();
+    WebAuthController webAuthController = Get.find();
+
     return Padding(
       padding: const EdgeInsets.all(40.0),
       child: Column(
@@ -126,7 +138,45 @@ class Home extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      statText("76%", "Income"),
+                                      FutureBuilder(
+                                        future: webVerify.fetchUsers(),
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot<List<BcUser>>
+                                                snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return kLoading;
+                                          } else if (snapshot.hasData) {
+                                            List<BcUser> data = snapshot.data
+                                                    ?.where(
+                                                      (e) => FirebaseAuth
+                                                                  .instance
+                                                                  .currentUser
+                                                                  ?.email ==
+                                                              "admin@skillchain.com"
+                                                          ? true
+                                                          : (e.skills ?? [])
+                                                              .map((item) =>
+                                                                  item.toJson())
+                                                              .toList()
+                                                              .toString()
+                                                              .contains(FirebaseAuth
+                                                                      .instance
+                                                                      .currentUser
+                                                                      ?.uid ??
+                                                                  ""),
+                                                    )
+                                                    .toList() ??
+                                                [];
+                                            print(data);
+                                            return statText(
+                                                data.length.toString(),
+                                                "Students");
+                                          } else {
+                                            return statText("-", "Students");
+                                          }
+                                        },
+                                      ),
                                       SizedBox(
                                         height: 40,
                                         child: VerticalDivider(
@@ -134,15 +184,62 @@ class Home extends StatelessWidget {
                                           color: Colors.white.withOpacity(.5),
                                         ),
                                       ),
-                                      statText("44%", "Spending"),
+                                      StreamBuilder(
+                                        stream: FirebaseFirestore.instance
+                                            .collection("requests")
+                                            .snapshots(),
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot<
+                                                    QuerySnapshot<
+                                                        Map<String, dynamic>>>
+                                                reqSnap) {
+                                          if (reqSnap.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return kLoading;
+                                          } else if (reqSnap.hasData) {
+                                            List<RequestModel> reqData = reqSnap
+                                                    .data?.docs
+                                                    .map((e) =>
+                                                        RequestModel.fromJson(
+                                                            e.data()))
+                                                    .toList() ??
+                                                [];
+                                            List<RequestModel>
+                                                currentUserReqData = reqData
+                                                    .where((e) => FirebaseAuth
+                                                                .instance
+                                                                .currentUser
+                                                                ?.email ==
+                                                            "admin@skillchain.com"
+                                                        ? true &&
+                                                            e.status ==
+                                                                "Pending"
+                                                        : e.industryId ==
+                                                                webAuthController
+                                                                    .customLoggedInUser
+                                                                    .value
+                                                                    ?.uid &&
+                                                            e.status ==
+                                                                "Pending")
+                                                    .toList();
+                                            return statText(
+                                                currentUserReqData.length
+                                                    .toString(),
+                                                "Pending Requests");
+                                          } else {
+                                            return statText(
+                                                "-", "Pending Requests");
+                                          }
+                                        },
+                                      ),
                                     ],
                                   ),
                                 ),
                               ),
                             ),
-                            circleText(orange, "Lorem Ipsum is dummy text"),
-                            circleText(lightBlue, "Lorem Ipsum is dummy text"),
-                            circleText(brown, "Lorem Ipsum is dummy text"),
+                            circleText(orange, "Strong encryption protocols."),
+                            circleText(lightBlue, "Identity verification."),
+                            circleText(brown, "Strict access controls."),
                           ],
                         ),
                       ),
@@ -179,7 +276,7 @@ class Home extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           getCustomFont("Engagement", 24, fontWeight: semiBold),
-                          Spacer(),
+                          const Spacer(),
                           getCustomFont(
                             "General statistics of\nuser engagement\nprocess.",
                             15,
@@ -189,16 +286,79 @@ class Home extends StatelessWidget {
                       ),
                       hSpace(60),
                       Expanded(
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              bottomBox(),
-                              bottomBox(),
-                              bottomBox(),
-                              bottomBox(),
-                            ],
-                          ),
+                        child: FutureBuilder(
+                          future: webVerify.fetchUsers(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<List<BcUser>> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return kLoading;
+                            } else if (snapshot.hasData) {
+                              return FutureBuilder(
+                                future: FirebaseFirestore.instance
+                                    .collection("users")
+                                    .get(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<
+                                            QuerySnapshot<Map<String, dynamic>>>
+                                        userSnap) {
+                                  if (userSnap.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return kLoading;
+                                  } else if (userSnap.hasData) {
+                                    return FutureBuilder(
+                                      future: FirebaseFirestore.instance
+                                          .collection("skills")
+                                          .get(),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<
+                                                  QuerySnapshot<
+                                                      Map<String, dynamic>>>
+                                              skillsSnap) {
+                                        if (skillsSnap.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return kLoading;
+                                        } else if (skillsSnap.hasData) {
+                                          List skillDocs = skillsSnap.data?.docs
+                                                  .map((item) => item.data())
+                                                  .toList() ??
+                                              [];
+                                          print(skillDocs);
+                                          return SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: Row(
+                                                children: [
+                                                  bottomBox(
+                                                      "Overall Users",
+                                                      snapshot.data!.length
+                                                          .toString()),
+                                                  bottomBox(
+                                                      "Institutes",
+                                                      userSnap.data!.docs.length
+                                                          .toString()),
+                                                  bottomBox(
+                                                      "Skills",
+                                                      skillDocs.length
+                                                          .toString()),
+                                                  bottomBox(
+                                                      "Precision", "100%"),
+                                                ],
+                                              ));
+                                        } else {
+                                          return getErrorMessage(
+                                              skillsSnap.data);
+                                        }
+                                      },
+                                    );
+                                  } else {
+                                    return getErrorMessage(snapshot.error);
+                                  }
+                                },
+                              );
+                            } else {
+                              return getErrorMessage(snapshot.error);
+                            }
+                          },
                         ),
                       ),
                     ],
