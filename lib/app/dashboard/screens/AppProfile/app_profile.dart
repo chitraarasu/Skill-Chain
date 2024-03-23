@@ -152,7 +152,8 @@ class AppProfile extends StatelessWidget {
                     textColor: orange,
                     radius: 10,
                     onTap: () {
-                      box.write("isSkipped", false);
+                      box.remove("authData");
+                      box.remove("profileData");
                       Get.offAll(() => OnBoardingPage());
                     },
                   ),
