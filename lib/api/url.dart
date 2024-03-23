@@ -4,7 +4,7 @@ extension URLExtension on APIRequest {
   String getBaseURL() {
     switch (type) {
       default:
-        return 'http://localhost:3000';
+        return 'http://localhost:3000'; // Fetch from api
     }
   }
 
