@@ -50,6 +50,7 @@ class NetImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return UniversalWebImage(
       imageUrl: image,
+      fit: BoxFit.cover,
       customLoaderBuilder: (_) {
         return Container(
           color: colorGrey3,
