@@ -2,6 +2,7 @@
 
 Backend Repo:- https://github.com/chitraarasu/blockchain-backend-skill-chain
 
-[![Watch the video](https://i.stack.imgur.com/Vp2cE.png)](https://chitraarasu.github.io/Skill-Chain/web_output.mp4)
-[![Watch the video](https://i.stack.imgur.com/Vp2cE.png)](https://chitraarasu.github.io/Skill-Chain/mobile_output.mp4)
 
+https://github.com/chitraarasu/Skill-Chain/assets/75994428/8629afa9-95b9-4a8e-8896-4d99e01815cf
+
+https://github.com/chitraarasu/Skill-Chain/assets/75994428/b7931b50-e040-4e75-90ea-d11e64179242
