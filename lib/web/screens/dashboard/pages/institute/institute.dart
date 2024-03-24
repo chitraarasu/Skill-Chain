@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:skill_chain/web/models/institute_user_model.dart';
 import 'package:skill_chain/web/utils/buttons/primary_button.dart';
 import 'package:skill_chain/web/utils/color_manager.dart';
@@ -36,6 +37,9 @@ class Institute extends StatelessWidget {
       ),
     );
   }
+
+  RxList docs = RxList();
+  RxList filteredDoc = RxList();
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +85,18 @@ class Institute extends StatelessWidget {
                       isNeedborder: false,
                       hint: "Search",
                       height: null,
+                      onChange: (value) {
+                        filteredDoc.value = docs
+                            .where((element) => element["institute_name"]
+                                .toString()
+                                .toLowerCase()
+                                .contains(value))
+                            .toList();
+                        // print(data.length);
+                        // filteredDoc.value = data
+                        //     .map((e) => InstituteUserModel.fromJson(e))
+                        //     .toList();
+                      },
                     ),
                   ),
                 ),
@@ -130,101 +146,108 @@ class Institute extends StatelessWidget {
                   return kLoading;
                 } else if (snapshot.hasData) {
                   print(snapshot.data?.docs);
-                  List docs =
+                  docs.value =
+                      snapshot.data?.docs.map((item) => item.data()).toList() ??
+                          [];
+                  filteredDoc.value =
                       snapshot.data?.docs.map((item) => item.data()).toList() ??
                           [];
 
-                  return ListView.builder(
-                    itemCount: docs.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      InstituteUserModel model =
-                          InstituteUserModel.fromJson(docs[index]);
+                  return Obx(
+                    () => ListView.builder(
+                      itemCount: filteredDoc.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        InstituteUserModel model =
+                            InstituteUserModel.fromJson(filteredDoc[index]);
 
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 15.0, horizontal: 25),
-                            child: Row(
-                              children: [
-                                CustomProfile(image: model.logo),
-                                hSpace(25),
-                                Expanded(
-                                  flex: 2,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      getCustomFont(
-                                        model.instituteName ?? "",
-                                        15,
-                                        fontColor: Colors.black,
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 15.0, horizontal: 25),
+                              child: Row(
+                                children: [
+                                  CustomProfile(image: model.logo),
+                                  hSpace(25),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        getCustomFont(
+                                          model.instituteName ?? "",
+                                          15,
+                                          fontColor: Colors.black,
+                                          fontWeight: bold,
+                                          maxLine: 1,
+                                        ),
+                                        getCustomFont(
+                                          model.instituteAddress ?? "",
+                                          12,
+                                          fontColor: colorGrey1,
+                                          fontWeight: medium,
+                                          maxLine: 3,
+                                          textAlign: TextAlign.justify,
+                                          txtHeight: 0,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Center(
+                                      child: getCustomFont(
+                                        model.instituteId ?? "",
+                                        13,
+                                        fontColor: colorGrey1,
                                         fontWeight: bold,
                                         maxLine: 1,
-                                      ),
-                                      getCustomFont(
-                                        model.instituteAddress ?? "",
-                                        12,
-                                        fontColor: colorGrey1,
-                                        fontWeight: medium,
-                                        maxLine: 3,
                                         textAlign: TextAlign.justify,
                                         txtHeight: 0,
                                       ),
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Center(
-                                    child: getCustomFont(
-                                      model.instituteId ?? "",
-                                      13,
-                                      fontColor: colorGrey1,
-                                      fontWeight: bold,
-                                      maxLine: 1,
-                                      textAlign: TextAlign.justify,
-                                      txtHeight: 0,
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  child: Center(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(
-                                            width: 1.5, color: darkGreen),
-                                        color: lightGreen,
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 6, horizontal: 12),
-                                        child: getCustomFont(
-                                          model.instituteAccess ?? "",
-                                          12,
-                                          fontColor: darkGreen,
-                                          fontWeight: bold,
-                                          maxLine: 1,
-                                          textAlign: TextAlign.justify,
-                                          txtHeight: 0,
+                                  Expanded(
+                                    child: Center(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(
+                                              width: 1.5, color: darkGreen),
+                                          color: lightGreen,
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 6, horizontal: 12),
+                                          child: getCustomFont(
+                                            model.instituteAccess ?? "",
+                                            12,
+                                            fontColor: darkGreen,
+                                            fontWeight: bold,
+                                            maxLine: 1,
+                                            textAlign: TextAlign.justify,
+                                            txtHeight: 0,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                CustomIcons(model),
-                              ],
+                                  CustomIcons(model),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   );
                 } else {
                   return getErrorMessage(snapshot.error);

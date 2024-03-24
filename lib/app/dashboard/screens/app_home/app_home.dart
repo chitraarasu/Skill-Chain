@@ -113,7 +113,7 @@ class AppHome extends StatelessWidget {
                                                                         .loggedInUser
                                                                         .value
                                                                         ?.skills
-                                                                        ?.first
+                                                                        ?.last
                                                                         .skillId)
                                                                 .name ??
                                                             "",
