@@ -1,6 +1,6 @@
 # Skill Chain Front-End Application
 
-Backend Repo:- https://github.com/chitraarasu/blockchain-backend-skill-chain
+Backend Repo:- https://github.com/chitraarasu/skill-chain-hf-bc
 
 
 https://github.com/chitraarasu/Skill-Chain/assets/75994428/8629afa9-95b9-4a8e-8896-4d99e01815cf
